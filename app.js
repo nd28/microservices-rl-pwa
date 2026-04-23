@@ -894,7 +894,7 @@ function openQuiz(id) {
   document.getElementById('quizBody').innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
       <h3 class="concept-title" style="margin-bottom:0;">${concept.title}</h3>
-      <button class="btn btn-small" style="width:auto;padding:0.5rem 1rem;font-size:0.8125rem;" onclick="openResources(${id})">Resources</button>
+      <button class="btn btn-secondary btn-small" style="width:auto;padding:0.5rem 1rem;font-size:0.8125rem;" onclick="openResources(${id})">Resources</button>
     </div>
     <div class="quiz-question">${concept.quiz.question}</div>
     <div class="quiz-options">
