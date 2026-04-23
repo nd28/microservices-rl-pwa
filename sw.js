@@ -1,4 +1,7 @@
-const CACHE_NAME = 'dojo-v2';
+// Microservices Dojo Service Worker
+// Version: dojo-v3
+
+const CACHE_NAME = 'dojo-v3';
 const urlsToCache = [
   './',
   './index.html',

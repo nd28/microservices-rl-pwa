@@ -1347,8 +1347,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Service Worker
+let updateReady = false;
+
+function updateApp() {
+  if ('caches' in window) {
+    caches.keys().then(names => {
+      return Promise.all(names.map(name => caches.delete(name)));
+    }).then(() => {
+      showToast('Cache cleared. Reloading...', 'success');
+      setTimeout(() => location.reload(true), 800);
+    });
+  } else {
+    location.reload(true);
+  }
+}
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js')
-    .then(() => console.log('SW registered'))
+    .then(reg => {
+      console.log('SW registered');
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            updateReady = true;
+            showToast('Update available! Tap Update App in Profile.', 'info');
+            const label = document.getElementById('updateLabel');
+            if (label) label.textContent = '1';
+          }
+        });
+      });
+    })
     .catch(err => console.log('SW failed', err));
 }
