@@ -460,11 +460,14 @@ const SKILL_NODES = [
 const BADGES = [
   { id: 'first', name: 'First Step', icon: '🌱' },
   { id: 'streak3', name: '3-Day Streak', icon: '🍃' },
+  { id: 'streak7', name: 'Week Warrior', icon: '🔥' },
   { id: 'quiz', name: 'Quiz Master', icon: '🎯' },
   { id: 'bug', name: 'Bug Hunter', icon: '🐛' },
   { id: 'architect', name: 'Architect', icon: '🏗️' },
   { id: 'speed', name: 'Speed Demon', icon: '⚡' },
   { id: 'scholar', name: 'Scholar', icon: '📚' },
+  { id: 'deep', name: 'Deep Thinker', icon: '💭' },
+  { id: 'collector', name: 'Resource Hunter', icon: '🔗' },
   { id: 'master', name: 'Grand Master', icon: '🏆' }
 ];
 
@@ -494,6 +497,7 @@ function getData() {
     level: 1,
     streak: 0,
     lastActive: null,
+    lastConceptOpened: null,
     conceptsCompleted: [],
     challengesCompleted: [],
     bookmarks: [],
@@ -740,6 +744,19 @@ function renderHome() {
   const missionsEl = document.getElementById('homeMissions');
   if (missionsEl) {
     missionsEl.innerHTML = '';
+    if (data.lastConceptOpened) {
+      const lastConcept = CONCEPTS.find(c => c.id === data.lastConceptOpened);
+      if (lastConcept) {
+        missionsEl.innerHTML += `
+          <button class="mission-card" onclick="pickMission('concept', ${lastConcept.id})">
+            <div class="mission-icon">▶</div>
+            <div class="mission-info">
+              <div class="mission-title">Continue: ${lastConcept.title}</div>
+              <div class="mission-meta">Pick up where you left off</div>
+            </div>
+          </button>`;
+      }
+    }
     if (review) {
       missionsEl.innerHTML += `
         <button class="mission-card" onclick="pickMission('concept', ${review.id})">
@@ -784,6 +801,13 @@ function getNextConceptName() {
 /* ============================================
    LEARN — SKILL PATH (ALL UNLOCKED)
    ============================================ */
+let currentFilter = '';
+
+function filterSkillPath(query) {
+  currentFilter = query.toLowerCase().trim();
+  renderSkillPath();
+}
+
 function renderSkillPath() {
   const data = getData();
   const container = document.getElementById('skillPath');
@@ -793,9 +817,12 @@ function renderSkillPath() {
     const conceptId = index + 1;
     const hasConcept = conceptId <= CONCEPTS.length;
     const isDone = hasConcept && data.conceptsCompleted.includes(conceptId);
+    const matches = !currentFilter || node.name.toLowerCase().includes(currentFilter) || (hasConcept && CONCEPTS[index].title.toLowerCase().includes(currentFilter));
 
     const btn = document.createElement('button');
     btn.className = `skill-node ${isDone ? 'node-done' : ''} ${!isDone && hasConcept ? 'node-current' : ''}`;
+    btn.style.opacity = matches ? '1' : '0.2';
+    btn.style.pointerEvents = matches ? 'auto' : 'none';
     btn.innerHTML = `
       <div class="node-circle">${isDone ? '✓' : node.icon}</div>
       <div class="node-name">${node.name}</div>
@@ -810,6 +837,7 @@ function renderSkillPath() {
     if (index < SKILL_NODES.length - 1) {
       const conn = document.createElement('div');
       conn.className = `connector ${isDone ? 'done' : ''}`;
+      conn.style.opacity = matches ? '1' : '0.2';
       container.appendChild(conn);
     }
   });
@@ -824,6 +852,7 @@ function openConcept(id) {
   currentConceptId = id;
   const data = getData();
   data.lastReviewed[id] = new Date().toISOString();
+  data.lastConceptOpened = id;
   saveData(data);
   const isDone = data.conceptsCompleted.includes(id);
   const isBookmarked = data.bookmarks.includes(id);
@@ -1075,11 +1104,14 @@ function renderProfile() {
   const earned = [];
   if (totalEarnedXP > 0 || data.conceptsCompleted.length > 0 || data.challengesCompleted.length > 0) earned.push('first');
   if (data.streak >= 3) earned.push('streak3');
+  if (data.streak >= 7) earned.push('streak7');
   if (data.conceptsCompleted.length >= 3) earned.push('quiz');
   if (data.challengesCompleted.length >= 3) earned.push('bug');
   if (data.level >= 3) earned.push('architect');
   if (totalEarnedXP >= 1200) earned.push('speed');
   if (data.conceptsCompleted.length >= 6) earned.push('scholar');
+  if (data.reflections.length >= 3) earned.push('deep');
+  if (data.bookmarks.length >= 3) earned.push('collector');
   if (data.level >= 5) earned.push('master');
 
   const grid = document.getElementById('profileBadges');
