@@ -1,4 +1,4 @@
-const CACHE_NAME = 'microservices-rl-v4';
+const CACHE_NAME = 'microservices-rl-v5';
 const urlsToCache = [
   './',
   './index.html',

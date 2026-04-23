@@ -856,6 +856,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Check URL params for episode pre-selection
+  const urlParams = new URLSearchParams(window.location.search);
+  const episodeParam = urlParams.get('episode');
+  if (episodeParam && document.getElementById('episodeSelect')) {
+    document.getElementById('episodeSelect').value = episodeParam;
+  }
+  
   initNavigation();
   
   const installBtn = document.getElementById('installBtn');
