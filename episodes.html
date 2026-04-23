@@ -289,7 +289,7 @@
       document.querySelectorAll('.episode-item').forEach(item => {
         item.addEventListener('click', () => {
           const ep = item.dataset.episode;
-          showEpisodeDetail(ep);
+          startOrViewEpisode(ep);
         });
       });
     });

@@ -551,3 +551,370 @@ html, body {
 .text-sm { font-size: 0.875rem; }
 .text-xs { font-size: 0.75rem; }
 .text-secondary { color: var(--text-secondary); }
+
+/* ============================================
+   MICROINTERACTIONS & ENHANCED UX
+   ============================================ */
+
+/* Button Ripple Effect */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Card Lift & Hover */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+/* Episode Item Interactions */
+.episode-item {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.episode-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.episode-item:active {
+  transform: scale(0.98);
+}
+
+.episode-item:active::before {
+  transform: translateX(100%);
+}
+
+/* Stat Card Pulse on Load */
+@keyframes statPulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.stat-card {
+  animation: statPulse 0.5s ease;
+}
+
+/* Progress Bar Glow */
+.progress-fill {
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Menu Button Press */
+.menu-btn {
+  transition: transform 0.15s ease, background 0.2s ease;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.menu-btn:active {
+  transform: scale(0.9);
+  background: var(--bg-card);
+}
+
+/* Bottom Nav Active Indicator */
+.nav-item {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--accent-light);
+  border-radius: 2px;
+  animation: navSlideIn 0.3s ease;
+}
+
+@keyframes navSlideIn {
+  from { width: 0; opacity: 0; }
+  to { width: 20px; opacity: 1; }
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  border-radius: 20px 20px 0 0;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: sticky;
+  top: 0;
+  background: var(--bg-secondary);
+  z-index: 10;
+  border-radius: 20px 20px 0 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.75rem;
+  line-height: 1;
+  padding: 0.25rem;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.modal-close:active {
+  transform: scale(0.9);
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 1rem 1.25rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.75rem;
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-secondary);
+}
+
+.modal-footer .btn {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Resource Links */
+.resource-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem;
+  background: var(--bg-card);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.resource-link:active {
+  background: var(--border);
+  transform: translateX(4px);
+}
+
+/* Toast Notifications */
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+  z-index: 400;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-info { background: var(--accent); }
+.toast-success { background: var(--success); }
+.toast-warning { background: var(--warning); }
+.toast-error { background: var(--danger); }
+
+/* Form Focus Glow */
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Checklist Item Interaction */
+.checklist-item {
+  transition: background 0.2s ease;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin: 0 -0.5rem;
+}
+
+.checklist-item:active {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.checklist-item input[type="checkbox"] {
+  transition: transform 0.15s ease;
+}
+
+.checklist-item input[type="checkbox"]:active {
+  transform: scale(0.85);
+}
+
+/* Reflect Card Entrance */
+.reflect-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reflect-card:active {
+  transform: scale(0.99);
+}
+
+/* Mood Button Selection */
+.mood-btn {
+  transition: all 0.2s ease;
+}
+
+.mood-btn:active {
+  transform: scale(0.95);
+}
+
+/* Install Prompt Slide */
+.install-prompt {
+  animation: slideUpPrompt 0.4s ease;
+}
+
+@keyframes slideUpPrompt {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Reward Value Counter Animation */
+@keyframes countUp {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.reward-value {
+  animation: countUp 0.4s ease;
+}
+
+/* Drawer Slide */
+.nav-drawer {
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth page transitions */
+.page-section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.page-section.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Stagger animation for lists */
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.episode-list .episode-item:nth-child(1) { animation: staggerIn 0.3s ease 0.05s both; }
+.episode-list .episode-item:nth-child(2) { animation: staggerIn 0.3s ease 0.1s both; }
+.episode-list .episode-item:nth-child(3) { animation: staggerIn 0.3s ease 0.15s both; }
+.episode-list .episode-item:nth-child(4) { animation: staggerIn 0.3s ease 0.2s both; }
+.episode-list .episode-item:nth-child(5) { animation: staggerIn 0.3s ease 0.25s both; }
+.episode-list .episode-item:nth-child(6) { animation: staggerIn 0.3s ease 0.3s both; }
+.episode-list .episode-item:nth-child(7) { animation: staggerIn 0.3s ease 0.35s both; }
+
+/* Pull to refresh hint (visual only) */
+@keyframes pullHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Success checkmark animation */
+@keyframes checkmark {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
