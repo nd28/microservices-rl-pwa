@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#3b82f6">
+  <title>About - Microservices Mastery</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>About</h1>
+        <div class="subtitle">Purpose & Version</div>
+      </div>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+    <nav class="nav-drawer" id="navDrawer">
+      <div class="nav-header"><h2>Menu</h2></div>
+      <ul class="nav-links">
+        <li><a href="./index.html"><span class="nav-icon">📊</span> Dashboard</a></li>
+        <li><a href="./episodes.html"><span class="nav-icon">📚</span> Episodes</a></li>
+        <li><a href="./tracker.html"><span class="nav-icon">🎯</span> Progress</a></li>
+        <li><a href="./reflect.html"><span class="nav-icon">📝</span> Reflect</a></li>
+        <li><a href="./about.html" class="active"><span class="nav-icon">ℹ️</span> About</a></li>
+      </ul>
+    </nav>
+
+    <main class="app-main">
+      <div class="card">
+        <div class="card-title">Purpose</div>
+        <p class="text-sm text-secondary" style="line-height: 1.7; margin-bottom: 1rem;">
+          <strong>Microservices Mastery</strong> is a learning companion for developers who want to 
+          master microservices architecture through a <strong>Reinforcement Learning-inspired</strong> approach.
+        </p>
+        <p class="text-sm text-secondary" style="line-height: 1.7; margin-bottom: 1rem;">
+          Instead of passively reading tutorials, you learn by <strong>doing, failing, reflecting, and iterating</strong> — 
+          just like an RL agent training in an environment.
+        </p>
+        <p class="text-sm text-secondary" style="line-height: 1.7;">
+          Each episode gives you hands-on challenges, rewards good architectural patterns, 
+          and penalizes anti-patterns. Your "policy" (decision-making intuition) improves 
+          over time through real experience.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">How It Works</div>
+        <div style="display: grid; gap: 1rem;">
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="font-size: 1.5rem;">🎮</span>
+            <div>
+              <strong style="color: var(--accent-light);">Episodes</strong>
+              <p class="text-sm text-secondary">Structured learning steps with increasing difficulty (curriculum learning)</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="font-size: 1.5rem;">🏆</span>
+            <div>
+              <strong style="color: var(--accent-light);">Rewards</strong>
+              <p class="text-sm text-secondary">Points for best practices (circuit breakers, observability, resilience)</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="font-size: 1.5rem;">⚠️</span>
+            <div>
+              <strong style="color: var(--accent-light);">Penalties</strong>
+              <p class="text-sm text-secondary">Negative rewards for anti-patterns (shared DB, tight coupling, no timeouts)</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="font-size: 1.5rem;">🔄</span>
+            <div>
+              <strong style="color: var(--accent-light);">Reflection</strong>
+              <p class="text-sm text-secondary">Experience Replay — revisit old episodes with new knowledge</p>
+            </div>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+            <span style="font-size: 1.5rem;">📊</span>
+            <div>
+              <strong style="color: var(--accent-light);">Progress Tracking</strong>
+              <p class="text-sm text-secondary">Visualize your learning journey and watch your policy converge</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">The RL Analogy</div>
+        <table style="width: 100%; font-size: 0.9rem; border-collapse: collapse;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border);">
+              <th style="text-align: left; padding: 0.5rem; color: var(--accent-light);">RL Concept</th>
+              <th style="text-align: left; padding: 0.5rem; color: var(--accent-light);">Your Learning</th>
+            </tr>
+          </thead>
+          <tbody class="text-secondary">
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem;">Environment</td>
+              <td style="padding: 0.5rem;">Real distributed systems problems</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem;">State</td>
+              <td style="padding: 0.5rem;">Your current knowledge + system state</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem;">Action</td>
+              <td style="padding: 0.5rem;">Design decisions, code changes</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem;">Reward</td>
+              <td style="padding: 0.5rem;">Points for good patterns</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem;">Policy</td>
+              <td style="padding: 0.5rem;">Your decision-making framework</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem;">Exploration</td>
+              <td style="padding: 0.5rem;">Trying new approaches</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.5rem;">Exploitation</td>
+              <td style="padding: 0.5rem;">Applying proven patterns</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Version Info</div>
+        <div style="display: grid; gap: 0.75rem; font-size: 0.9rem;">
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <span class="text-secondary">App Version</span>
+            <span style="color: var(--accent-light); font-weight: 600;">v1.0.0</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <span class="text-secondary">Cache Version</span>
+            <span style="color: var(--accent-light); font-weight: 600;">v2</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <span class="text-secondary">Total Episodes</span>
+            <span style="color: var(--accent-light); font-weight: 600;">20</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <span class="text-secondary">Phases</span>
+            <span style="color: var(--accent-light); font-weight: 600;">4</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <span class="text-secondary">Data Storage</span>
+            <span style="color: var(--accent-light); font-weight: 600;">Local (Offline)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+            <span class="text-secondary">License</span>
+            <span style="color: var(--accent-light); font-weight: 600;">MIT</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Credits</div>
+        <p class="text-sm text-secondary" style="line-height: 1.7;">
+          Built with ❤️ using vanilla HTML, CSS, and JavaScript. 
+          No frameworks, no tracking, no data collection. 
+          Your learning data stays entirely on your device.
+        </p>
+        <p class="text-sm text-secondary" style="line-height: 1.7; margin-top: 0.75rem;">
+          Hosted on <strong>GitHub Pages</strong> via <strong>gh CLI</strong>. 
+          Source code available at 
+          <a href="https://github.com/nd28/microservices-rl-pwa" target="_blank" rel="noopener" style="color: var(--accent-light);">github.com/nd28/microservices-rl-pwa</a>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Feedback</div>
+        <p class="text-sm text-secondary" style="line-height: 1.7; margin-bottom: 1rem;">
+          Found a bug or have a suggestion? Open an issue on GitHub or export your data and share your thoughts.
+        </p>
+        <button class="btn btn-secondary" onclick="exportData()">💾 Export My Data</button>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="./index.html" class="nav-item">
+        <span class="nav-item-icon">📊</span>
+        <span>Home</span>
+      </a>
+      <a href="./episodes.html" class="nav-item">
+        <span class="nav-item-icon">📚</span>
+        <span>Learn</span>
+      </a>
+      <a href="./tracker.html" class="nav-item">
+        <span class="nav-item-icon">🎯</span>
+        <span>Track</span>
+      </a>
+      <a href="./reflect.html" class="nav-item">
+        <span class="nav-item-icon">📝</span>
+        <span>Reflect</span>
+      </a>
+      <a href="./about.html" class="nav-item active">
+        <span class="nav-item-icon">ℹ️</span>
+        <span>About</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,10 +1,11 @@
-const CACHE_NAME = 'microservices-rl-v2';
+const CACHE_NAME = 'microservices-rl-v3';
 const urlsToCache = [
   './',
   './index.html',
   './episodes.html',
   './tracker.html',
   './reflect.html',
+  './about.html',
   './styles.css',
   './app.js',
   './manifest.json',
