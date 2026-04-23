@@ -1139,6 +1139,102 @@ html, body {
 }
 
 /* ============================================
+    ONBOARDING
+    ============================================ */
+.onboarding-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.onboarding-overlay:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.onboarding-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: 2rem 1.5rem;
+  max-width: 340px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.4s var(--ease-smooth);
+}
+
+.onboarding-emoji {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.onboarding-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.onboarding-text {
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================
+    REFLECTIONS LIST
+    ============================================ */
+.reflection-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.reflection-item:last-child {
+  border-bottom: none;
+}
+
+.reflection-date {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.reflection-prompt {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+  color: var(--text);
+}
+
+.reflection-text {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.reflection-mood {
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+/* ============================================
     UTILITIES
     ============================================ */
 .hidden { display: none !important; }

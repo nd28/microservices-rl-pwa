@@ -381,6 +381,67 @@ function processOrder(order) {
       correct: 'Exactly. Configuration should be externalized so the same artifact runs in any environment.',
       wrong: 'Think about deploying the same code to dev, staging, and production with different settings.'
     }
+  },
+  {
+    id: 7,
+    title: 'Container Bloat',
+    difficulty: 'easy',
+    story: 'This Dockerfile builds a 2GB image for a simple Node.js service. What is the anti-pattern?',
+    code: `FROM ubuntu:latest
+RUN apt-get update && apt-get install -y nodejs npm git curl python3
+COPY . /app
+WORKDIR /app
+RUN npm install
+CMD ["node", "server.js"]`,
+    options: [
+      { text: 'Using a full OS image instead of a slim or distroless base', correct: true },
+      { text: 'The service should use Python instead of Node.js', correct: false },
+      { text: 'Containers should never use npm', correct: false }
+    ],
+    feedback: {
+      correct: 'Correct. Use slim base images (e.g., node:alpine) and multi-stage builds to keep containers small.',
+      wrong: 'The issue is not the language. Think about what unnecessary things are in the image.'
+    }
+  },
+  {
+    id: 8,
+    title: 'No Resource Limits',
+    difficulty: 'medium',
+    story: 'A container consumes all CPU and memory on the node, causing other pods to crash. What was missing?',
+    code: `apiVersion: v1
+kind: Pod
+metadata:
+  name: hungry-service
+spec:
+  containers:
+  - name: app
+    image: my-app:latest`,
+    options: [
+      { text: 'Resource requests and limits for CPU and memory', correct: true },
+      { text: 'More nodes in the cluster', correct: false },
+      { text: 'A larger container image', correct: false }
+    ],
+    feedback: {
+      correct: 'Right. Always set resource requests and limits so Kubernetes can schedule and protect workloads.',
+      wrong: 'Adding more nodes just delays the problem. What tells Kubernetes how much a pod needs?'
+    }
+  },
+  {
+    id: 9,
+    title: 'Manual Deployments',
+    difficulty: 'hard',
+    story: 'A developer deploys to production by running scripts from their laptop. What risk does this create?',
+    code: `// deploy.sh run by developer locally
+ssh prod-server "docker pull my-app:latest && docker restart my-app"`,
+    options: [
+      { text: 'No audit trail, inconsistent environments, and bus factor risk', correct: true },
+      { text: 'The app will run slower because of SSH overhead', correct: false },
+      { text: 'Developers should not have production access', correct: false }
+    ],
+    feedback: {
+      correct: 'Exactly. Use CI/CD pipelines for reproducible, audited, automated deployments.',
+      wrong: 'SSH overhead is negligible. Think about what happens when that developer is on vacation and something breaks.'
+    }
   }
 ];
 
@@ -428,6 +489,7 @@ function getData() {
   const defaults = {
     theme: 'auto',
     soundEnabled: false,
+    hasSeenOnboarding: false,
     xp: 0,
     level: 1,
     streak: 0,
@@ -761,6 +823,8 @@ function openConcept(id) {
   if (!concept) return;
   currentConceptId = id;
   const data = getData();
+  data.lastReviewed[id] = new Date().toISOString();
+  saveData(data);
   const isDone = data.conceptsCompleted.includes(id);
   const isBookmarked = data.bookmarks.includes(id);
   const doneBadge = isDone ? `<div style="display:inline-flex;align-items:center;gap:0.375rem;background:var(--success-bg);color:var(--success);padding:0.375rem 0.875rem;border-radius:100px;font-size:0.8125rem;font-weight:700;margin-bottom:0.75rem;"><span>✓</span> Completed</div>` : '';
@@ -1047,6 +1111,28 @@ function renderProfile() {
       }).join('');
     }
   }
+
+  // Reflections section
+  const reflectionsContainer = document.getElementById('profileReflections');
+  if (reflectionsContainer) {
+    if (data.reflections.length === 0) {
+      reflectionsContainer.innerHTML = '<div style="color:var(--text-dim);font-size:0.875rem;text-align:center;padding:0.5rem 0;">No journal entries yet. Reflect to start your journey.</div>';
+    } else {
+      const sorted = [...data.reflections].reverse();
+      reflectionsContainer.innerHTML = sorted.slice(0, 10).map(r => {
+        const date = new Date(r.date);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        return `
+          <div class="reflection-item">
+            <div class="reflection-date">${dateStr}</div>
+            <div class="reflection-prompt">${r.prompt}</div>
+            <div class="reflection-text">${r.text}</div>
+            ${r.mood ? `<div class="reflection-mood">${r.mood === 'calm' ? '😌' : r.mood === 'okay' ? '😐' : '😮‍💨'}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+  }
 }
 
 /* ============================================
@@ -1195,6 +1281,22 @@ function hapticError() {
 }
 
 /* ============================================
+   ONBOARDING
+   ============================================ */
+function showOnboarding() {
+  const overlay = document.getElementById('onboardingOverlay');
+  overlay.classList.remove('hidden');
+}
+
+function dismissOnboarding() {
+  const overlay = document.getElementById('onboardingOverlay');
+  overlay.classList.add('hidden');
+  const data = getData();
+  data.hasSeenOnboarding = true;
+  saveData(data);
+}
+
+/* ============================================
    INIT
    ============================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1207,6 +1309,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSkillPath();
   renderChallenges();
   renderProfile();
+  if (!getData().hasSeenOnboarding) {
+    showOnboarding();
+  }
 });
 
 // Service Worker

@@ -119,6 +119,10 @@
           <div style="font-size:0.8125rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.625rem;">Bookmarks</div>
           <div id="profileBookmarks"></div>
         </div>
+        <div style="margin-top:1.25rem;">
+          <div style="font-size:0.8125rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.625rem;">Journal</div>
+          <div id="profileReflections"></div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal()">Done</button>
@@ -185,6 +189,16 @@
       <div class="modal-footer">
         <button class="btn btn-primary" onclick="saveReflection()">Save</button>
         <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+
+    <!-- ONBOARDING OVERLAY -->
+    <div class="onboarding-overlay hidden" id="onboardingOverlay">
+      <div class="onboarding-card">
+        <div class="onboarding-emoji">🌿</div>
+        <h2 class="onboarding-title">Welcome to the Dojo</h2>
+        <p class="onboarding-text">Tap a node to explore a concept. No rush. Learn at your own pace.</p>
+        <button class="btn btn-primary" onclick="dismissOnboarding()">Start Learning</button>
       </div>
     </div>
 
