@@ -1,11 +1,11 @@
-const CACHE_NAME = 'microservices-rl-v6';
+const CACHE_NAME = 'dojo-v1';
 const urlsToCache = [
   './',
   './index.html',
-  './episodes.html',
-  './tracker.html',
-  './reflect.html',
-  './about.html',
+  './learn.html',
+  './play.html',
+  './progress.html',
+  './you.html',
   './styles.css',
   './app.js',
   './manifest.json',
@@ -31,11 +31,8 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        if (response) {
-          return response;
-        }
+        if (response) return response;
         return fetch(event.request).catch(() => {
-          // Fallback for navigation requests
           if (event.request.mode === 'navigate') {
             return caches.match('./index.html');
           }

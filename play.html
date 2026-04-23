@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FF6B4A">
+  <title>Play - Microservices Dojo</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>Play</h1>
+        <div class="subtitle">Interactive Challenges</div>
+      </div>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+    <nav class="nav-drawer" id="navDrawer">
+      <div class="nav-header"><h2>Menu</h2></div>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">🏠</span> Home</a></li>
+        <li><a href="learn.html"><span class="nav-icon">🎓</span> Learn</a></li>
+        <li><a href="play.html" class="active"><span class="nav-icon">🎮</span> Play</a></li>
+        <li><a href="progress.html"><span class="nav-icon">📈</span> Progress</a></li>
+        <li><a href="you.html"><span class="nav-icon">👤</span> You</a></li>
+      </ul>
+    </nav>
+
+    <main class="app-main">
+      <!-- Daily Challenge -->
+      <div class="mission-card">
+        <div class="mission-header">
+          <span class="mission-badge">Daily Challenge</span>
+          <span class="mission-xp">+100 XP</span>
+        </div>
+        <div class="mission-title">Spot the Anti-Pattern</div>
+        <div class="mission-desc">Can you find what's wrong with this microservices architecture?</div>
+      </div>
+
+      <!-- Challenge 1 -->
+      <div class="challenge-card">
+        <div class="challenge-difficulty difficulty-easy">
+          <span>●</span> Easy
+        </div>
+        <div class="challenge-title">The Shared Database Trap</div>
+        <div class="challenge-desc">Review this code. What's the microservices anti-pattern here?</div>
+        <div class="challenge-code">
+// User Service
+const user = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+
+// Order Service  
+const order = await db.query(`
+  SELECT o.*, u.name, u.email 
+  FROM orders o
+  JOIN users u ON o.user_id = u.id
+`);
+        </div>
+        <div id="challenge-1-options">
+          <button class="quiz-option" onclick="checkChallenge(this, false, 1)">The query is too slow</button>
+          <button class="quiz-option" onclick="checkChallenge(this, true, 1)">Order Service directly queries User's table</button>
+          <button class="quiz-option" onclick="checkChallenge(this, false, 1)">Missing error handling</button>
+        </div>
+        <div id="challenge-1-feedback" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 12px; font-weight: 600;"></div>
+      </div>
+
+      <!-- Challenge 2 -->
+      <div class="challenge-card">
+        <div class="challenge-difficulty difficulty-medium">
+          <span>●</span> Medium
+        </div>
+        <div class="challenge-title">Missing Resilience</div>
+        <div class="challenge-desc">This service calls another. What should be added?</div>
+        <div class="challenge-code">
+async function getUserProfile(userId) {
+  const user = await fetch(`http://user-service/users/${userId}`);
+  const orders = await fetch(`http://order-service/orders/${userId}`);
+  return { user, orders };
+}
+        </div>
+        <div id="challenge-2-options">
+          <button class="quiz-option" onclick="checkChallenge(this, false, 2)">Add authentication headers</button>
+          <button class="quiz-option" onclick="checkChallenge(this, true, 2)">Add timeout, retry, and circuit breaker</button>
+          <button class="quiz-option" onclick="checkChallenge(this, false, 2)">Use a faster server</button>
+        </div>
+        <div id="challenge-2-feedback" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 12px; font-weight: 600;"></div>
+      </div>
+
+      <!-- Challenge 3 -->
+      <div class="challenge-card">
+        <div class="challenge-difficulty difficulty-hard">
+          <span>●</span> Hard
+        </div>
+        <div class="challenge-title">Synchronous Chain</div>
+        <div class="challenge-desc">This creates a problem. What's it called and how to fix it?</div>
+        <div class="challenge-code">
+// API Gateway → User Service → 
+//   Order Service → Inventory Service → 
+//     Payment Service → Notification Service
+        </div>
+        <div id="challenge-3-options">
+          <button class="quiz-option" onclick="checkChallenge(this, false, 3)">It's fine, just add caching</button>
+          <button class="quiz-option" onclick="checkChallenge(this, true, 3)">Cascading failure risk - use async events</button>
+          <button class="quiz-option" onclick="checkChallenge(this, false, 3)">Merge all services into one</button>
+        </div>
+        <div id="challenge-3-feedback" style="display: none; margin-top: 1rem; padding: 1rem; border-radius: 12px; font-weight: 600;"></div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">
+        <span class="nav-item-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="learn.html" class="nav-item">
+        <span class="nav-item-icon">🎓</span>
+        <span>Learn</span>
+      </a>
+      <a href="play.html" class="nav-item active">
+        <span class="nav-item-icon">🎮</span>
+        <span>Play</span>
+      </a>
+      <a href="progress.html" class="nav-item">
+        <span class="nav-item-icon">📈</span>
+        <span>Progress</span>
+      </a>
+      <a href="you.html" class="nav-item">
+        <span class="nav-item-icon">👤</span>
+        <span>You</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

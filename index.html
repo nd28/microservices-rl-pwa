@@ -3,146 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0a0a1a">
+  <meta name="theme-color" content="#FF6B4A">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Microservices Mastery</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Microservices Dojo</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="images/icon-192.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app-shell">
-    <!-- Header -->
     <header class="app-header">
       <div>
-        <h1>Microservices Mastery</h1>
-        <div class="subtitle">RL-Inspired Learning</div>
+        <h1>Microservices Dojo</h1>
+        <div class="subtitle">Learn by Doing</div>
       </div>
       <button class="menu-btn" id="menuBtn">☰</button>
     </header>
 
-    <!-- Navigation Drawer -->
     <div class="nav-overlay" id="navOverlay"></div>
     <nav class="nav-drawer" id="navDrawer">
       <div class="nav-header">
         <h2>Menu</h2>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html" class="active"><span class="nav-icon">📊</span> Dashboard</a></li>
-        <li><a href="episodes.html"><span class="nav-icon">📚</span> Episodes</a></li>
-        <li><a href="tracker.html"><span class="nav-icon">🎯</span> Progress</a></li>
-        <li><a href="reflect.html"><span class="nav-icon">📝</span> Reflect</a></li>
-        <li><a href="#" onclick="exportData()"><span class="nav-icon">💾</span> Export Data</a></li>
-        <li><a href="#" onclick="resetData()"><span class="nav-icon">🗑️</span> Reset All</a></li>
-        <li><a href="./about.html"><span class="nav-icon">ℹ️</span> About</a></li>
+        <li><a href="index.html" class="active"><span class="nav-icon">🏠</span> Home</a></li>
+        <li><a href="learn.html"><span class="nav-icon">🎓</span> Learn</a></li>
+        <li><a href="play.html"><span class="nav-icon">🎮</span> Play</a></li>
+        <li><a href="progress.html"><span class="nav-icon">📈</span> Progress</a></li>
+        <li><a href="you.html"><span class="nav-icon">👤</span> You</a></li>
       </ul>
     </nav>
 
-    <!-- Install Prompt -->
-    <div class="install-prompt" id="installPrompt">
-      <span>Install for offline access?</span>
-      <button class="btn btn-success" style="width: auto; margin: 0; padding: 0.5rem 1rem;" id="installBtn">Install</button>
-    </div>
-
-    <!-- Main Content -->
     <main class="app-main">
-      <!-- Dashboard -->
-      <div id="dashboardPage" class="page-section active">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value" id="completedCount">0</div>
-            <div class="stat-label">Episodes Done</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="totalReward">0</div>
-            <div class="stat-label">Total Reward</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="currentPhase">1</div>
-            <div class="stat-label">Current Phase</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="explorationRate">80%</div>
-            <div class="stat-label">Exploration</div>
-          </div>
-        </div>
+      <!-- Streak Banner -->
+      <div class="streak-banner" id="streakBanner">
+        <div class="streak-count" id="streakCount">3</div>
+        <div class="streak-label">day streak! Keep it up!</div>
+      </div>
 
-        <div class="card">
-          <div class="card-title">Overall Progress</div>
-          <div class="progress-container">
-            <div class="progress-header">
-              <span>Training Progress</span>
-              <span id="progressPercent">0%</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="progressBar" style="width: 0%"></div>
-            </div>
+      <!-- Today's Mission -->
+      <div class="mission-card" id="dailyMission">
+        <div class="mission-header">
+          <span class="mission-badge">Today's Mission</span>
+          <span class="mission-xp">+50 XP</span>
+        </div>
+        <div class="mission-title">Master Service Boundaries</div>
+        <div class="mission-desc">Learn why "database per service" is the most important rule in microservices architecture.</div>
+        <button class="btn btn-primary" onclick="location.href='learn.html'">Start Learning</button>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="card">
+        <div class="card-title">Your Progress</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--brand);">12</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">Concepts</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--success);">8</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">Challenges</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--info);">1,250</div>
+            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">XP</div>
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-title">Current Episode</div>
-          <div id="currentEpisode">
-            <p class="text-secondary text-center" style="padding: 1rem;">
-              No active episode. Start your journey!
-            </p>
-            <a href="episodes.html" class="btn btn-primary">Browse Episodes</a>
+      <!-- Continue Where You Left Off -->
+      <div class="card" id="continueCard">
+        <div class="card-title">Continue Learning</div>
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+          <div style="width: 48px; height: 48px; background: var(--brand-glow); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">📦</div>
+          <div>
+            <div style="font-weight: 700;">Container Orchestration</div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">3 of 5 lessons completed</div>
           </div>
         </div>
-
-        <div class="card">
-          <div class="card-title">Quick Actions</div>
-          <button class="btn btn-secondary" onclick="quickReflect()">
-            📝 Quick Reflection
-          </button>
-          <button class="btn btn-secondary" onclick="location.href='tracker.html'">
-            🎯 Log Episode
-          </button>
+        <div class="progress-bar" style="margin-bottom: 1rem;">
+          <div class="xp-fill" style="width: 60%;"></div>
         </div>
+        <button class="btn btn-secondary" onclick="location.href='learn.html'">Continue</button>
+      </div>
 
-        <div class="card">
-          <div class="card-title">Learning Tip</div>
-          <p class="text-sm text-secondary" id="dailyTip">
-            Start with Episode 1: Build a monolith and then split it into services. 
-            Experience the pain before learning the patterns.
-          </p>
-        </div>
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-title">Quick Start</div>
+        <button class="btn btn-secondary" onclick="location.href='play.html'">
+          🎯 Daily Challenge
+        </button>
+        <button class="btn btn-secondary" onclick="location.href='learn.html'">
+          📚 Browse All Topics
+        </button>
       </div>
     </main>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
       <a href="index.html" class="nav-item active">
-        <span class="nav-item-icon">📊</span>
+        <span class="nav-item-icon">🏠</span>
         <span>Home</span>
       </a>
-      <a href="episodes.html" class="nav-item">
-        <span class="nav-item-icon">📚</span>
+      <a href="learn.html" class="nav-item">
+        <span class="nav-item-icon">🎓</span>
         <span>Learn</span>
       </a>
-      <a href="tracker.html" class="nav-item">
-        <span class="nav-item-icon">🎯</span>
-        <span>Track</span>
+      <a href="play.html" class="nav-item">
+        <span class="nav-item-icon">🎮</span>
+        <span>Play</span>
       </a>
-      <a href="reflect.html" class="nav-item">
-        <span class="nav-item-icon">📝</span>
-        <span>Reflect</span>
+      <a href="progress.html" class="nav-item">
+        <span class="nav-item-icon">📈</span>
+        <span>Progress</span>
       </a>
-      <a href="./about.html" class="nav-item">
-        <span class="nav-item-icon">ℹ️</span>
-        <span>About</span>
+      <a href="you.html" class="nav-item">
+        <span class="nav-item-icon">👤</span>
+        <span>You</span>
       </a>
     </nav>
   </div>
 
   <script src="app.js"></script>
-  <script>
-    // Page-specific initialization
-    document.addEventListener('DOMContentLoaded', () => {
-      updateDashboard();
-      showRandomTip();
-    });
-  </script>
 </body>
 </html>

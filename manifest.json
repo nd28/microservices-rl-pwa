@@ -1,52 +1,20 @@
 {
-  "name": "Microservices Mastery",
-  "short_name": "MicroRL",
-  "description": "Learn Microservices with Reinforcement Learning techniques",
+  "name": "Microservices Dojo",
+  "short_name": "Dojo",
+  "description": "Learn microservices through bite-sized lessons and interactive challenges",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#0a0a1a",
+  "background_color": "#FAFAF8",
+  "theme_color": "#FF6B4A",
   "orientation": "portrait",
   "icons": [
-    {
-      "src": "images/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "images/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "images/icon-72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "images/icon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "images/icon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "images/icon-144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "images/icon-152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "images/icon-384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "images/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
