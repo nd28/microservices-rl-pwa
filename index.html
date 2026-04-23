@@ -57,6 +57,7 @@
     <!-- PLAY -->
     <main class="app-main" id="playSection">
       <h2 class="section-title">Challenges</h2>
+      <div class="progress-card glass-card" id="challengeProgress"></div>
       <div class="challenge-list" id="challengeList"></div>
     </main>
 
@@ -110,6 +111,10 @@
           <button class="setting-row" onclick="exportData()">
             <span>Export Data</span>
             <span class="setting-value">↗</span>
+          </button>
+          <button class="setting-row" onclick="exportReflections()">
+            <span>Export Journal</span>
+            <span class="setting-value">📝</span>
           </button>
           <button class="setting-row" onclick="updateApp()">
             <span>Update App</span>

@@ -500,6 +500,7 @@ function getData() {
     lastConceptOpened: null,
     conceptsCompleted: [],
     challengesCompleted: [],
+    quizWrong: [],
     bookmarks: [],
     lastReviewed: {},
     reflections: [],
@@ -715,17 +716,23 @@ function getReviewConcept() {
   const data = getData();
   const completed = CONCEPTS.filter(c => data.conceptsCompleted.includes(c.id));
   if (completed.length < 2) return null;
-  // pick one not reviewed today
   const today = new Date().toDateString();
-  const candidates = completed.filter(c => {
+  const notToday = c => {
     const last = data.lastReviewed[c.id];
     return !last || new Date(last).toDateString() !== today;
-  });
-  if (candidates.length === 0) {
-    // all reviewed today, pick random completed
-    return completed[Math.floor(Math.random() * completed.length)];
+  };
+  // prioritize concepts answered wrong
+  const wrongOnes = completed.filter(c => data.quizWrong.includes(c.id) && notToday(c));
+  if (wrongOnes.length > 0) {
+    return wrongOnes[Math.floor(Math.random() * wrongOnes.length)];
   }
-  return candidates[Math.floor(Math.random() * candidates.length)];
+  // then any not reviewed today
+  const candidates = completed.filter(notToday);
+  if (candidates.length > 0) {
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+  // all reviewed today
+  return completed[Math.floor(Math.random() * completed.length)];
 }
 
 function renderHome() {
@@ -944,6 +951,11 @@ function checkAnswer(btn, isCorrect, conceptId) {
     feedback.style.color = 'var(--error)';
     feedback.textContent = 'Not quite. That is okay.';
     hapticError();
+    const data = getData();
+    if (!data.quizWrong.includes(conceptId)) {
+      data.quizWrong.push(conceptId);
+      saveData(data);
+    }
     document.getElementById('quizFooter').innerHTML = `
       <button class="btn btn-secondary" onclick="closeModal()">Dismiss</button>
     `;
@@ -985,6 +997,21 @@ function getResourceIcon(type) {
    ============================================ */
 function renderChallenges() {
   const data = getData();
+  const total = CHALLENGES.length;
+  const done = data.challengesCompleted.length;
+  const pct = Math.round((done / total) * 100);
+  const progressEl = document.getElementById('challengeProgress');
+  if (progressEl) {
+    progressEl.innerHTML = `
+      <div class="progress-header">
+        <span class="progress-title">Your Progress</span>
+        <span class="progress-count">${done} / ${total}</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:${pct}%"></div>
+      </div>
+    `;
+  }
   const container = document.getElementById('challengeList');
   container.innerHTML = '';
   CHALLENGES.forEach(ch => {
@@ -1274,6 +1301,31 @@ function exportData() {
   a.click();
   URL.revokeObjectURL(url);
   showToast('Data exported.', 'success');
+}
+
+function exportReflections() {
+  const data = getData();
+  if (data.reflections.length === 0) {
+    showToast('No journal entries yet.', 'info');
+    return;
+  }
+  let md = '# My Learning Journal\n\n';
+  md += `Generated: ${new Date().toLocaleDateString()}\n\n---\n\n`;
+  [...data.reflections].reverse().forEach(r => {
+    const date = new Date(r.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const mood = r.mood ? (r.mood === 'calm' ? '😌 Calm' : r.mood === 'okay' ? '😐 Okay' : '😮‍💨 Tired') : '';
+    md += `## ${r.prompt}\n\n`;
+    md += `**${date}**${mood ? ' · ' + mood : ''}\n\n`;
+    md += `${r.text}\n\n---\n\n`;
+  });
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `dojo-journal-${new Date().toISOString().split('T')[0]}.md`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Journal exported.', 'success');
 }
 
 function resetData() {
