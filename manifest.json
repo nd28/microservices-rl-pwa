@@ -2,7 +2,7 @@
   "name": "Microservices Mastery",
   "short_name": "MicroRL",
   "description": "Learn Microservices with Reinforcement Learning techniques",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#3b82f6",
