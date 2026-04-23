@@ -87,6 +87,12 @@
         <div class="profile-header">
           <div class="level-circle" id="profileLevel">1</div>
           <div class="level-label">Apprentice</div>
+          <button class="info-btn" onclick="toggleBuildInfo()" aria-label="Build info">?</button>
+        </div>
+        <div class="build-info hidden" id="buildInfo">
+          <div class="build-row"><span>Build</span><span id="buildSha">—</span></div>
+          <div class="build-row"><span>Updated</span><span id="buildDate">—</span></div>
+          <button class="build-refresh" onclick="fetchBuildInfo(true)">↻ Refresh</button>
         </div>
         <div class="xp-block">
           <div class="xp-header">

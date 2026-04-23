@@ -1188,6 +1188,86 @@ html, body {
 }
 
 /* ============================================
+    BUILD INFO
+    ============================================ */
+.info-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-tertiary);
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.info-btn:active {
+  transform: scale(0.9);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.build-info {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 0.875rem 1rem;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.25s ease;
+}
+
+.build-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  padding: 0.375rem 0;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.build-row:last-child {
+  border-bottom: none;
+}
+
+.build-row span:first-child {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.build-row span:last-child {
+  color: var(--text);
+  font-weight: 700;
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.75rem;
+}
+
+.build-refresh {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-dim);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.build-refresh:active {
+  background: var(--accent-glow);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ============================================
     SEARCH
     ============================================ */
 .search-input {

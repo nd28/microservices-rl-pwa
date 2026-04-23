@@ -1114,6 +1114,53 @@ function escapeHtml(text) {
 }
 
 /* ============================================
+   BUILD INFO (GitHub API)
+   ============================================ */
+const GITHUB_REPO = 'nd28/microservices-rl-pwa';
+const BUILD_CACHE_KEY = 'dojo_build_info';
+const BUILD_CACHE_TTL = 1000 * 60 * 30; // 30 minutes
+
+async function fetchBuildInfo(force = false) {
+  const cached = localStorage.getItem(BUILD_CACHE_KEY);
+  if (!force && cached) {
+    const { sha, date, fetchedAt } = JSON.parse(cached);
+    if (Date.now() - fetchedAt < BUILD_CACHE_TTL) {
+      renderBuildInfo(sha, date);
+      return;
+    }
+  }
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/commits/main`);
+    if (!res.ok) throw new Error('API failed');
+    const commit = await res.json();
+    const sha = commit.sha.slice(0, 7);
+    const date = new Date(commit.commit.author.date);
+    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    localStorage.setItem(BUILD_CACHE_KEY, JSON.stringify({ sha, date: dateStr, fetchedAt: Date.now() }));
+    renderBuildInfo(sha, dateStr);
+  } catch (e) {
+    renderBuildInfo('—', 'Unavailable');
+  }
+}
+
+function renderBuildInfo(sha, date) {
+  const shaEl = document.getElementById('buildSha');
+  const dateEl = document.getElementById('buildDate');
+  if (shaEl) shaEl.textContent = sha;
+  if (dateEl) dateEl.textContent = date;
+}
+
+function toggleBuildInfo() {
+  const el = document.getElementById('buildInfo');
+  if (el.classList.contains('hidden')) {
+    el.classList.remove('hidden');
+    fetchBuildInfo();
+  } else {
+    el.classList.add('hidden');
+  }
+}
+
+/* ============================================
    PROFILE
    ============================================ */
 function renderProfile() {
