@@ -914,9 +914,16 @@ html, body {
 
 .btn-secondary:active { background: var(--accent-glow); }
 
+.btn-small {
+  min-height: 36px;
+  padding: 0 0.875rem;
+  font-size: 0.875rem;
+  width: auto;
+}
+
 /* ============================================
-   TOASTS
-   ============================================ */
+    TOASTS
+    ============================================ */
 .toast {
   position: fixed;
   bottom: 108px;

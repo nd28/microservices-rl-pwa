@@ -854,23 +854,18 @@ function openConcept(id) {
   data.lastReviewed[id] = new Date().toISOString();
   data.lastConceptOpened = id;
   saveData(data);
-  const isDone = data.conceptsCompleted.includes(id);
   const isBookmarked = data.bookmarks.includes(id);
-  const doneBadge = isDone ? `<div style="display:inline-flex;align-items:center;gap:0.375rem;background:var(--success-bg);color:var(--success);padding:0.375rem 0.875rem;border-radius:100px;font-size:0.8125rem;font-weight:700;margin-bottom:0.75rem;"><span>✓</span> Completed</div>` : '';
 
   document.getElementById('conceptBody').innerHTML = `
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;">
-      <div>${doneBadge}<div class="concept-number">${id}</div><h3 class="concept-title" style="margin-bottom:0;">${concept.title}</h3></div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.75rem;">
+      <h3 class="concept-title" style="margin-bottom:0;">${concept.title}</h3>
       <button class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleBookmark(${id})" aria-label="Bookmark">${isBookmarked ? '★' : '☆'}</button>
     </div>
     <p class="cozy-text">${concept.body}</p>
     <div class="diagram-box">${concept.diagram}</div>
-    <p class="cozy-text" style="font-size:0.9375rem;"><strong>Principle:</strong> ${concept.principle}</p>
   `;
   document.getElementById('conceptFooter').innerHTML = `
     <button class="btn btn-primary" onclick="openQuiz(${id})">Quiz Me</button>
-    <button class="btn btn-secondary" onclick="openResources(${id})">Resources</button>
-    <button class="btn btn-secondary" onclick="closeModal()">Dismiss</button>
   `;
   openModal('conceptModal');
 }
@@ -897,8 +892,10 @@ function openQuiz(id) {
   quizAnsweredCorrectly = false;
 
   document.getElementById('quizBody').innerHTML = `
-    <div class="concept-number">${id}</div>
-    <h3 class="concept-title">${concept.title}</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+      <h3 class="concept-title" style="margin-bottom:0;">${concept.title}</h3>
+      <button class="btn btn-small" style="width:auto;padding:0.5rem 1rem;font-size:0.8125rem;" onclick="openResources(${id})">Resources</button>
+    </div>
     <div class="quiz-question">${concept.quiz.question}</div>
     <div class="quiz-options">
       ${concept.quiz.options.map((opt, i) => `
