@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#3b82f6">
+  <title>Episodes - Microservices Mastery</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1>Episodes</h1>
+        <div class="subtitle">Your Training Curriculum</div>
+      </div>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+    <nav class="nav-drawer" id="navDrawer">
+      <div class="nav-header"><h2>Menu</h2></div>
+      <ul class="nav-links">
+        <li><a href="index.html"><span class="nav-icon">📊</span> Dashboard</a></li>
+        <li><a href="episodes.html" class="active"><span class="nav-icon">📚</span> Episodes</a></li>
+        <li><a href="tracker.html"><span class="nav-icon">🎯</span> Progress</a></li>
+        <li><a href="reflect.html"><span class="nav-icon">📝</span> Reflect</a></li>
+      </ul>
+    </nav>
+
+    <main class="app-main">
+      <div class="card">
+        <div class="card-title">Phase 1: Foundations</div>
+        <div class="progress-container">
+          <div class="progress-header">
+            <span>Exploration Heavy (ε=0.8)</span>
+            <span id="phase1Progress">0/3</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="phase1Bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="episode-list" id="phase1Episodes">
+        <li class="episode-item" data-episode="1">
+          <div class="episode-header">
+            <span class="episode-number">EP 1</span>
+            <span class="episode-status status-pending" id="status-1">Pending</span>
+          </div>
+          <div class="episode-title">Hello Distributed World</div>
+          <div class="episode-meta">Build monolith baseline + 2 services</div>
+        </li>
+        <li class="episode-item" data-episode="2">
+          <div class="episode-header">
+            <span class="episode-number">EP 2</span>
+            <span class="episode-status status-pending" id="status-2">Pending</span>
+          </div>
+          <div class="episode-title">Adding Resilience</div>
+          <div class="episode-meta">Health checks, timeouts, retries</div>
+        </li>
+        <li class="episode-item" data-episode="3">
+          <div class="episode-header">
+            <span class="episode-number">EP 3</span>
+            <span class="episode-status status-pending" id="status-3">Pending</span>
+          </div>
+          <div class="episode-title">Communication Patterns Lab</div>
+          <div class="episode-meta">REST vs Messaging vs gRPC</div>
+        </li>
+      </ul>
+
+      <div class="card">
+        <div class="card-title">Phase 2: Core Patterns</div>
+        <div class="progress-container">
+          <div class="progress-header">
+            <span>Balanced (ε=0.5)</span>
+            <span id="phase2Progress">0/5</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="phase2Bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="episode-list" id="phase2Episodes">
+        <li class="episode-item" data-episode="4">
+          <div class="episode-header">
+            <span class="episode-number">EP 4</span>
+            <span class="episode-status status-pending" id="status-4">Pending</span>
+          </div>
+          <div class="episode-title">The Database Split</div>
+          <div class="episode-meta">Database-per-service pattern</div>
+        </li>
+        <li class="episode-item" data-episode="5">
+          <div class="episode-header">
+            <span class="episode-number">EP 5</span>
+            <span class="episode-status status-pending" id="status-5">Pending</span>
+          </div>
+          <div class="episode-title">Circuit Breaker & Bulkhead</div>
+          <div class="episode-meta">Resilience patterns in action</div>
+        </li>
+        <li class="episode-item" data-episode="6">
+          <div class="episode-header">
+            <span class="episode-number">EP 6</span>
+            <span class="episode-status status-pending" id="status-6">Pending</span>
+          </div>
+          <div class="episode-title">API Gateway</div>
+          <div class="episode-meta">Routing, auth, aggregation</div>
+        </li>
+        <li class="episode-item" data-episode="7">
+          <div class="episode-header">
+            <span class="episode-number">EP 7</span>
+            <span class="episode-status status-pending" id="status-7">Pending</span>
+          </div>
+          <div class="episode-title">Service Discovery</div>
+          <div class="episode-meta">No more hardcoded URLs</div>
+        </li>
+        <li class="episode-item" data-episode="8">
+          <div class="episode-header">
+            <span class="episode-number">EP 8</span>
+            <span class="episode-status status-pending" id="status-8">Pending</span>
+          </div>
+          <div class="episode-title">Observability Deep Dive</div>
+          <div class="episode-meta">Logging, metrics, tracing</div>
+        </li>
+      </ul>
+
+      <div class="card">
+        <div class="card-title">Phase 3: Orchestration</div>
+        <div class="progress-container">
+          <div class="progress-header">
+            <span>Advanced (ε=0.3)</span>
+            <span id="phase3Progress">0/7</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="phase3Bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="episode-list" id="phase3Episodes">
+        <li class="episode-item" data-episode="9">
+          <div class="episode-header">
+            <span class="episode-number">EP 9</span>
+            <span class="episode-status status-pending" id="status-9">Pending</span>
+          </div>
+          <div class="episode-title">Docker Compose to Kubernetes</div>
+          <div class="episode-meta">Container orchestration</div>
+        </li>
+        <li class="episode-item" data-episode="10">
+          <div class="episode-header">
+            <span class="episode-number">EP 10</span>
+            <span class="episode-status status-pending" id="status-10">Pending</span>
+          </div>
+          <div class="episode-title">Config & Secrets Management</div>
+          <div class="episode-meta">Environment-specific configs</div>
+        </li>
+        <li class="episode-item" data-episode="11">
+          <div class="episode-header">
+            <span class="episode-number">EP 11</span>
+            <span class="episode-status status-pending" id="status-11">Pending</span>
+          </div>
+          <div class="episode-title">CI/CD Pipeline</div>
+          <div class="episode-meta">Automated testing & deployment</div>
+        </li>
+        <li class="episode-item" data-episode="12">
+          <div class="episode-header">
+            <span class="episode-number">EP 12</span>
+            <span class="episode-status status-pending" id="status-12">Pending</span>
+          </div>
+          <div class="episode-title">Event Sourcing or CQRS</div>
+          <div class="episode-meta">Advanced data patterns</div>
+        </li>
+        <li class="episode-item" data-episode="13">
+          <div class="episode-header">
+            <span class="episode-number">EP 13</span>
+            <span class="episode-status status-pending" id="status-13">Pending</span>
+          </div>
+          <div class="episode-title">Saga Pattern</div>
+          <div class="episode-meta">Distributed transactions</div>
+        </li>
+        <li class="episode-item" data-episode="14">
+          <div class="episode-header">
+            <span class="episode-number">EP 14</span>
+            <span class="episode-status status-pending" id="status-14">Pending</span>
+          </div>
+          <div class="episode-title">Service Mesh</div>
+          <div class="episode-meta">Istio/Linkerd, mTLS, canary</div>
+        </li>
+        <li class="episode-item" data-episode="15">
+          <div class="episode-header">
+            <span class="episode-number">EP 15</span>
+            <span class="episode-status status-pending" id="status-15">Pending</span>
+          </div>
+          <div class="episode-title">Chaos Engineering</div>
+          <div class="episode-meta">Intentionally breaking things</div>
+        </li>
+      </ul>
+
+      <div class="card">
+        <div class="card-title">Phase 4: Meta-Learning</div>
+        <div class="progress-container">
+          <div class="progress-header">
+            <span>Expert (ε=0.1)</span>
+            <span id="phase4Progress">0/5</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="phase4Bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="episode-list" id="phase4Episodes">
+        <li class="episode-item" data-episode="16">
+          <div class="episode-header">
+            <span class="episode-number">EP 16</span>
+            <span class="episode-status status-pending" id="status-16">Pending</span>
+          </div>
+          <div class="episode-title">Capstone Project Start</div>
+          <div class="episode-meta">Design multi-service architecture</div>
+        </li>
+        <li class="episode-item" data-episode="17">
+          <div class="episode-header">
+            <span class="episode-number">EP 17</span>
+            <span class="episode-status status-pending" id="status-17">Pending</span>
+          </div>
+          <div class="episode-title">Performance Optimization</div>
+          <div class="episode-meta">Load testing & tuning</div>
+        </li>
+        <li class="episode-item" data-episode="18">
+          <div class="episode-header">
+            <span class="episode-number">EP 18</span>
+            <span class="episode-status status-pending" id="status-18">Pending</span>
+          </div>
+          <div class="episode-title">Security Hardening</div>
+          <div class="episode-meta">Zero-trust networking</div>
+        </li>
+        <li class="episode-item" data-episode="19">
+          <div class="episode-header">
+            <span class="episode-number">EP 19</span>
+            <span class="episode-status status-pending" id="status-19">Pending</span>
+          </div>
+          <div class="episode-title">Operational Excellence</div>
+          <div class="episode-meta">SLOs, runbooks, alerting</div>
+        </li>
+        <li class="episode-item" data-episode="20">
+          <div class="episode-header">
+            <span class="episode-number">EP 20</span>
+            <span class="episode-status status-pending" id="status-20">Pending</span>
+          </div>
+          <div class="episode-title">Final Review & Transfer</div>
+          <div class="episode-meta">Refactor Episode 1 with all learnings</div>
+        </li>
+      </ul>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">
+        <span class="nav-item-icon">📊</span>
+        <span>Home</span>
+      </a>
+      <a href="episodes.html" class="nav-item active">
+        <span class="nav-item-icon">📚</span>
+        <span>Learn</span>
+      </a>
+      <a href="tracker.html" class="nav-item">
+        <span class="nav-item-icon">🎯</span>
+        <span>Track</span>
+      </a>
+      <a href="reflect.html" class="nav-item">
+        <span class="nav-item-icon">📝</span>
+        <span>Reflect</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderEpisodeList();
+      
+      // Add click handlers to episode items
+      document.querySelectorAll('.episode-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const ep = item.dataset.episode;
+          showEpisodeDetail(ep);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
