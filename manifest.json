@@ -4,8 +4,8 @@
   "description": "Learn microservices through bite-sized lessons and interactive challenges",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#FAFAF8",
-  "theme_color": "#FF6B4A",
+  "background_color": "#12141A",
+  "theme_color": "#6B8E5A",
   "orientation": "portrait",
   "icons": [
     { "src": "images/icon-72.png", "sizes": "72x72", "type": "image/png" },

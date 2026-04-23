@@ -1,11 +1,7 @@
-const CACHE_NAME = 'dojo-v1';
+const CACHE_NAME = 'dojo-v2';
 const urlsToCache = [
   './',
   './index.html',
-  './learn.html',
-  './play.html',
-  './progress.html',
-  './you.html',
   './styles.css',
   './app.js',
   './manifest.json',

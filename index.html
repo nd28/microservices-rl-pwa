@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#FF6B4A">
+  <meta name="theme-color" content="#6B8E5A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Microservices Dojo</title>
@@ -13,115 +13,182 @@
 </head>
 <body>
   <div class="app-shell">
+    <div class="bg-layer"></div>
+
+    <!-- CELEBRATION OVERLAY -->
+    <div class="celebration-layer" id="celebrationLayer">
+      <div class="bloom-ring"></div>
+      <svg class="checkmark-svg" viewBox="0 0 100 100">
+        <circle class="checkmark-circle" cx="50" cy="50" r="44" fill="none" stroke="var(--accent)" stroke-width="4"/>
+        <path class="checkmark-path" d="M28 52 L42 66 L72 36" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
     <header class="app-header">
-      <div>
-        <h1>Microservices Dojo</h1>
-        <div class="subtitle">Learn by Doing</div>
-      </div>
-      <button class="menu-btn" id="menuBtn">☰</button>
+      <h1 id="greeting">Good morning</h1>
     </header>
 
-    <div class="nav-overlay" id="navOverlay"></div>
-    <nav class="nav-drawer" id="navDrawer">
-      <div class="nav-header">
-        <h2>Menu</h2>
-      </div>
-      <ul class="nav-links">
-        <li><a href="index.html" class="active"><span class="nav-icon">🏠</span> Home</a></li>
-        <li><a href="learn.html"><span class="nav-icon">🎓</span> Learn</a></li>
-        <li><a href="play.html"><span class="nav-icon">🎮</span> Play</a></li>
-        <li><a href="progress.html"><span class="nav-icon">📈</span> Progress</a></li>
-        <li><a href="you.html"><span class="nav-icon">👤</span> You</a></li>
-      </ul>
-    </nav>
-
-    <main class="app-main">
-      <!-- Streak Banner -->
-      <div class="streak-banner" id="streakBanner">
-        <div class="streak-count" id="streakCount">3</div>
-        <div class="streak-label">day streak! Keep it up!</div>
-      </div>
-
-      <!-- Today's Mission -->
-      <div class="mission-card" id="dailyMission">
-        <div class="mission-header">
-          <span class="mission-badge">Today's Mission</span>
-          <span class="mission-xp">+50 XP</span>
-        </div>
-        <div class="mission-title">Master Service Boundaries</div>
-        <div class="mission-desc">Learn why "database per service" is the most important rule in microservices architecture.</div>
-        <button class="btn btn-primary" onclick="location.href='learn.html'">Start Learning</button>
-      </div>
-
-      <!-- Quick Stats -->
-      <div class="card">
-        <div class="card-title">Your Progress</div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
-          <div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--brand);">12</div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">Concepts</div>
-          </div>
-          <div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--success);">8</div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">Challenges</div>
-          </div>
-          <div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--info);">1,250</div>
-            <div style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">XP</div>
-          </div>
+    <!-- HOME -->
+    <main class="app-main active" id="homeSection">
+      <div class="center-card glass-card" style="margin-top: 1rem;">
+        <h2 class="card-heading">Choose your focus</h2>
+        <div class="mission-list" id="homeMissions">
+          <!-- populated by renderHome() -->
         </div>
       </div>
-
-      <!-- Continue Where You Left Off -->
-      <div class="card" id="continueCard">
-        <div class="card-title">Continue Learning</div>
-        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-          <div style="width: 48px; height: 48px; background: var(--brand-glow); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">📦</div>
-          <div>
-            <div style="font-weight: 700;">Container Orchestration</div>
-            <div style="font-size: 0.875rem; color: var(--text-secondary);">3 of 5 lessons completed</div>
-          </div>
+      <div class="home-stats">
+        <span class="stat-pill" id="homeLevel">Level 1</span>
+        <div class="xp-bar-thin">
+          <div class="xp-fill" id="homeXpFill" style="width:0%"></div>
         </div>
-        <div class="progress-bar" style="margin-bottom: 1rem;">
-          <div class="xp-fill" style="width: 60%;"></div>
-        </div>
-        <button class="btn btn-secondary" onclick="location.href='learn.html'">Continue</button>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="card">
-        <div class="card-title">Quick Start</div>
-        <button class="btn btn-secondary" onclick="location.href='play.html'">
-          🎯 Daily Challenge
-        </button>
-        <button class="btn btn-secondary" onclick="location.href='learn.html'">
-          📚 Browse All Topics
-        </button>
+        <span class="stat-pill" id="homeXpText">0 XP</span>
+        <span class="stat-pill" id="homeStreak"></span>
       </div>
     </main>
 
-    <nav class="bottom-nav">
-      <a href="index.html" class="nav-item active">
-        <span class="nav-item-icon">🏠</span>
-        <span>Home</span>
-      </a>
-      <a href="learn.html" class="nav-item">
-        <span class="nav-item-icon">🎓</span>
-        <span>Learn</span>
-      </a>
-      <a href="play.html" class="nav-item">
-        <span class="nav-item-icon">🎮</span>
-        <span>Play</span>
-      </a>
-      <a href="progress.html" class="nav-item">
-        <span class="nav-item-icon">📈</span>
-        <span>Progress</span>
-      </a>
-      <a href="you.html" class="nav-item">
-        <span class="nav-item-icon">👤</span>
-        <span>You</span>
-      </a>
+    <!-- LEARN -->
+    <main class="app-main" id="learnSection">
+      <h2 class="section-title">Your Journey</h2>
+      <div class="skill-path" id="skillPath"></div>
+      <div class="cozy-hint" id="learnHint">Tap a node to explore. No rush.</div>
+    </main>
+
+    <!-- PLAY -->
+    <main class="app-main" id="playSection">
+      <h2 class="section-title">Challenges</h2>
+      <div class="challenge-list" id="challengeList"></div>
+    </main>
+
+    <!-- FLOATING DOCK -->
+    <nav class="floating-dock" id="floatingDock" aria-label="Navigation">
+      <button class="dock-item active" data-section="home" aria-label="Home">
+        <span class="dock-icon">🏠</span>
+      </button>
+      <button class="dock-item" data-section="learn" aria-label="Learn">
+        <span class="dock-icon">🎓</span>
+      </button>
+      <button class="dock-item" data-section="play" aria-label="Play">
+        <span class="dock-icon">🎮</span>
+      </button>
+      <button class="dock-item" data-section="profile" aria-label="Profile">
+        <span class="dock-icon">👤</span>
+      </button>
     </nav>
+
+    <!-- MODAL OVERLAY -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- PROFILE MODAL -->
+    <div class="modal profile-modal" id="profileModal">
+      <div class="modal-handle"></div>
+      <div class="modal-body">
+        <div class="profile-header">
+          <div class="level-circle" id="profileLevel">1</div>
+          <div class="level-label">Apprentice</div>
+        </div>
+        <div class="xp-block">
+          <div class="xp-header">
+            <span>Next level</span>
+            <span id="profileXpText">0 / 500 XP</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-fill" id="profileXpFill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="badges-grid" id="profileBadges"></div>
+        <button class="btn btn-primary" onclick="openReflection()">🌿 Reflect</button>
+        <div class="settings-block">
+          <button class="setting-row" onclick="toggleTheme()">
+            <span>Theme</span>
+            <span class="setting-value" id="themeLabel">Auto</span>
+          </button>
+          <button class="setting-row" onclick="toggleSound()">
+            <span>Sound</span>
+            <span class="setting-value" id="soundLabel">Off</span>
+          </button>
+          <button class="setting-row" onclick="exportData()">
+            <span>Export Data</span>
+            <span class="setting-value">↗</span>
+          </button>
+          <button class="setting-row danger" onclick="resetData()">
+            <span>Reset Progress</span>
+            <span class="setting-value">↺</span>
+          </button>
+        </div>
+        <div style="margin-top:1.25rem;">
+          <div style="font-size:0.8125rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.625rem;">Bookmarks</div>
+          <div id="profileBookmarks"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Done</button>
+      </div>
+    </div>
+
+    <!-- CONCEPT MODAL -->
+    <div class="modal concept-modal" id="conceptModal">
+      <div class="modal-handle"></div>
+      <div class="modal-body" id="conceptBody"></div>
+      <div class="modal-footer" id="conceptFooter">
+        <button class="btn btn-secondary" onclick="closeModal()">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- QUIZ MODAL -->
+    <div class="modal quiz-modal" id="quizModal">
+      <div class="modal-handle"></div>
+      <div class="modal-body" id="quizBody"></div>
+      <div class="modal-footer" id="quizFooter">
+        <button class="btn btn-secondary" onclick="closeModal()">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- RESOURCES MODAL -->
+    <div class="modal resources-modal" id="resourcesModal">
+      <div class="modal-handle"></div>
+      <div class="modal-body" id="resourcesBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Done</button>
+      </div>
+    </div>
+
+    <!-- CHALLENGE MODAL -->
+    <div class="modal challenge-modal" id="challengeModal">
+      <div class="modal-handle"></div>
+      <div class="modal-body" id="challengeBody"></div>
+      <div class="modal-footer" id="challengeFooter">
+        <button class="btn btn-secondary" onclick="closeModal()">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- REFLECTION MODAL -->
+    <div class="modal reflection-modal" id="reflectionModal">
+      <div class="modal-handle"></div>
+      <div class="modal-body">
+        <h3 class="modal-title">How do you feel?</h3>
+        <div class="mood-row">
+          <button class="mood-btn" data-mood="calm" onclick="pickMood('calm')">😌</button>
+          <button class="mood-btn" data-mood="okay" onclick="pickMood('okay')">😐</button>
+          <button class="mood-btn" data-mood="tired" onclick="pickMood('tired')">😮‍💨</button>
+        </div>
+        <h3 class="modal-title" style="margin-top:1.5rem">Pick a prompt</h3>
+        <div class="prompt-list">
+          <button class="prompt-card" onclick="pickPrompt(0)">I learned...</button>
+          <button class="prompt-card" onclick="pickPrompt(1)">I'm stuck on...</button>
+          <button class="prompt-card" onclick="pickPrompt(2)">I want to try...</button>
+        </div>
+        <div class="reflection-input hidden" id="reflectionInputArea">
+          <div class="prompt-label" id="reflectionPromptLabel">I learned...</div>
+          <textarea class="form-textarea" id="reflectionText" placeholder="Start typing..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="saveReflection()">Save</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+
+    <div id="toastContainer"></div>
   </div>
 
   <script src="app.js"></script>
