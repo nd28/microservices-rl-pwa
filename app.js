@@ -492,7 +492,9 @@ function getData() {
   const defaults = {
     theme: 'auto',
     soundEnabled: false,
+    notificationsEnabled: false,
     hasSeenOnboarding: false,
+    installDismissed: false,
     xp: 0,
     level: 1,
     streak: 0,
@@ -586,6 +588,51 @@ function toggleSound() {
   saveData(data);
   renderProfile();
   if (data.soundEnabled) playSound('success');
+}
+
+function toggleNotifications() {
+  const data = getData();
+  if (!data.notificationsEnabled) {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(perm => {
+        if (perm === 'granted') {
+          data.notificationsEnabled = true;
+          saveData(data);
+          renderProfile();
+          showToast('Daily reminders enabled.', 'success');
+          scheduleReminder();
+        } else {
+          showToast('Permission denied.', 'error');
+        }
+      });
+    } else {
+      showToast('Notifications not supported.', 'error');
+    }
+  } else {
+    data.notificationsEnabled = false;
+    saveData(data);
+    renderProfile();
+    showToast('Reminders disabled.', 'info');
+  }
+}
+
+function scheduleReminder() {
+  if (!('Notification' in window)) return;
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  const delay = target - now;
+  setTimeout(() => {
+    const data = getData();
+    if (data.notificationsEnabled) {
+      new Notification('Microservices Dojo', {
+        body: 'Time for your daily learning session. No rush.',
+        icon: 'images/icon-192.png',
+        badge: 'images/icon-72.png'
+      });
+      scheduleReminder();
+    }
+  }, delay);
 }
 
 /* ============================================
@@ -712,24 +759,42 @@ function pickMission(type, id) {
   }
 }
 
+function getSRSInterval(wrongCount) {
+  // Spaced repetition: 1 day, 3 days, 7 days, 14 days
+  const intervals = [1, 3, 7, 14];
+  return intervals[Math.min(wrongCount, intervals.length - 1)] * 24 * 60 * 60 * 1000;
+}
+
 function getReviewConcept() {
   const data = getData();
   const completed = CONCEPTS.filter(c => data.conceptsCompleted.includes(c.id));
   if (completed.length < 2) return null;
-  const today = new Date().toDateString();
-  const notToday = c => {
+  const now = Date.now();
+  const todayStr = new Date().toDateString();
+  // SRS: check if enough time has passed since last review
+  const dueForReview = completed.filter(c => {
     const last = data.lastReviewed[c.id];
-    return !last || new Date(last).toDateString() !== today;
-  };
-  // prioritize concepts answered wrong
-  const wrongOnes = completed.filter(c => data.quizWrong.includes(c.id) && notToday(c));
-  if (wrongOnes.length > 0) {
-    return wrongOnes[Math.floor(Math.random() * wrongOnes.length)];
+    if (!last) return true;
+    if (new Date(last).toDateString() === todayStr) return false;
+    const wrongCount = data.quizWrong.filter(id => id === c.id).length;
+    const interval = getSRSInterval(wrongCount);
+    return now - new Date(last).getTime() >= interval;
+  });
+  if (dueForReview.length > 0) {
+    // prioritize wrong ones, then random
+    const wrongOnes = dueForReview.filter(c => data.quizWrong.includes(c.id));
+    if (wrongOnes.length > 0) {
+      return wrongOnes[Math.floor(Math.random() * wrongOnes.length)];
+    }
+    return dueForReview[Math.floor(Math.random() * dueForReview.length)];
   }
-  // then any not reviewed today
-  const candidates = completed.filter(notToday);
-  if (candidates.length > 0) {
-    return candidates[Math.floor(Math.random() * candidates.length)];
+  // nothing due, pick any not reviewed today
+  const notToday = completed.filter(c => {
+    const last = data.lastReviewed[c.id];
+    return !last || new Date(last).toDateString() !== todayStr;
+  });
+  if (notToday.length > 0) {
+    return notToday[Math.floor(Math.random() * notToday.length)];
   }
   // all reviewed today
   return completed[Math.floor(Math.random() * completed.length)];
@@ -818,7 +883,12 @@ function filterSkillPath(query) {
 function renderSkillPath() {
   const data = getData();
   const container = document.getElementById('skillPath');
+  const svgEl = document.getElementById('skillSvg');
   container.innerHTML = '';
+  if (svgEl) svgEl.innerHTML = '';
+
+  const total = SKILL_NODES.length;
+  const paths = [];
 
   SKILL_NODES.forEach((node, index) => {
     const conceptId = index + 1;
@@ -841,11 +911,21 @@ function renderSkillPath() {
     }
     container.appendChild(btn);
 
-    if (index < SKILL_NODES.length - 1) {
-      const conn = document.createElement('div');
-      conn.className = `connector ${isDone ? 'done' : ''}`;
-      conn.style.opacity = matches ? '1' : '0.2';
-      container.appendChild(conn);
+    if (index < total - 1 && svgEl) {
+      const nextDone = (index + 2) <= CONCEPTS.length && data.conceptsCompleted.includes(index + 2);
+      const x1 = ((index + 0.5) / total) * 100;
+      const x2 = ((index + 1.5) / total) * 100;
+      const y = 50;
+      const cp1x = x1 + (x2 - x1) * 0.5;
+      const cp1y = y - 15;
+      const cp2x = x1 + (x2 - x1) * 0.5;
+      const cp2y = y + 15;
+      const d = `M ${x1} ${y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y}`;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', `skill-path-line ${isDone && nextDone ? 'done' : ''}`);
+      path.setAttribute('stroke-opacity', matches ? '1' : '0.2');
+      svgEl.appendChild(path);
     }
   });
 }
@@ -1201,6 +1281,35 @@ function renderProfile() {
   const labels = { auto: 'Auto', light: 'Light', dark: 'Dark' };
   document.getElementById('themeLabel').textContent = labels[data.theme] || 'Auto';
   document.getElementById('soundLabel').textContent = data.soundEnabled ? 'On' : 'Off';
+  document.getElementById('notifLabel').textContent = data.notificationsEnabled ? 'On' : 'Off';
+
+  // Stats card
+  const statsEl = document.getElementById('statsCard');
+  if (statsEl) {
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const weekConcepts = data.conceptsCompleted.filter(id => {
+      const d = data.lastReviewed[id];
+      return d && new Date(d) > weekAgo;
+    }).length;
+    const weekReflections = data.reflections.filter(r => new Date(r.date) > weekAgo).length;
+    statsEl.innerHTML = `
+      <div class="stats-title">This Week</div>
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="stat-value">${weekConcepts}</div>
+          <div class="stat-label">Learned</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-value">${data.challengesCompleted.length}</div>
+          <div class="stat-label">Challenges</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-value">${weekReflections}</div>
+          <div class="stat-label">Reflections</div>
+        </div>
+      </div>
+    `;
+  }
 
   // Bookmarks section
   const bookmarksContainer = document.getElementById('profileBookmarks');
@@ -1336,6 +1445,39 @@ function checkStreak() {
 }
 
 /* ============================================
+   INSTALL BANNER
+   ============================================ */
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const data = getData();
+  if (!data.installDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.classList.remove('hidden');
+  }
+});
+
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      dismissInstall();
+    });
+  }
+}
+
+function dismissInstall() {
+  const banner = document.getElementById('installBanner');
+  if (banner) banner.classList.add('hidden');
+  const data = getData();
+  data.installDismissed = true;
+  saveData(data);
+}
+
+/* ============================================
    DATA TOOLS
    ============================================ */
 function exportData() {
@@ -1373,6 +1515,33 @@ function exportReflections() {
   a.click();
   URL.revokeObjectURL(url);
   showToast('Journal exported.', 'success');
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported || typeof imported !== 'object') throw new Error('Invalid file');
+      const current = getData();
+      const merged = { ...current, ...imported };
+      // preserve certain fields
+      merged.theme = current.theme;
+      merged.soundEnabled = current.soundEnabled;
+      merged.notificationsEnabled = current.notificationsEnabled;
+      merged.hasSeenOnboarding = current.hasSeenOnboarding;
+      merged.installDismissed = current.installDismissed;
+      saveData(merged);
+      showToast('Data imported. Reloading...', 'success');
+      setTimeout(() => location.reload(), 800);
+    } catch (err) {
+      showToast('Import failed. Invalid file.', 'error');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
 function resetData() {
@@ -1439,6 +1608,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProfile();
   if (!getData().hasSeenOnboarding) {
     showOnboarding();
+  }
+  if (getData().notificationsEnabled) {
+    scheduleReminder();
   }
 });
 
