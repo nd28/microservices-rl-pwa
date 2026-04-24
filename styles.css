@@ -1484,8 +1484,48 @@ html, body {
 }
 
 /* ============================================
+    RL BRAIN (Q-TABLE HEATMAP)
+    ============================================ */
+.rl-grid {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr);
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+}
+
+.rl-cell {
+  padding: 0.375rem 0.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: 'SF Mono', Monaco, monospace;
+  transition: background 0.3s ease;
+}
+
+.rl-header {
+  color: var(--text-dim);
+  background: transparent;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.rl-header.rl-current {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================
     PHASED SKILL PATH
     ============================================ */
+.phase-modal .modal-body {
+  animation: fadeInUp 0.35s ease;
+}
+
 .phase-block {
   margin-bottom: 1.5rem;
   background: var(--bg-glass);

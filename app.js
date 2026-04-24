@@ -1100,6 +1100,7 @@ function getData() {
     lastReviewed: {},
     reflections: [],
     draftReflection: null,
+    phasesCelebrated: [],
     startedAt: new Date().toISOString()
   };
   if (!raw) return defaults;
@@ -1395,8 +1396,8 @@ function getReviewConcept() {
 
 function renderHome() {
   const data = getData();
-  const needed = data.level * 500;
-  const totalXp = (data.level - 1) * 500 + data.xp;
+  const needed = 300;
+  const totalXp = (data.level - 1) * 300 + data.xp;
   const pct = Math.min((data.xp / needed) * 100, 100);
   document.getElementById('homeLevel').textContent = 'Level ' + data.level;
   document.getElementById('homeXpFill').style.width = pct + '%';
@@ -1476,17 +1477,17 @@ function buildRLMission(action) {
   if (action === 'learn') {
     const next = CONCEPTS.find(c => !getData().conceptsCompleted.includes(c.id));
     if (!next) return null;
-    return { title: `Learn ${next.title}`, meta: 'RL suggests new concepts', onclick: `pickMission('learn');rlUpdateReward('learn',5)` };
+    return { title: `Learn ${next.title}`, meta: 'Agent thinks new concepts help most now', onclick: `pickMission('learn');rlUpdateReward('learn',5)` };
   }
   if (action === 'review') {
     const review = getReviewConcept();
     if (!review) return null;
-    return { title: `Review ${review.title}`, meta: 'RL suggests spaced repetition', onclick: `pickMission('concept', ${review.id});rlUpdateReward('review',8)` };
+    return { title: `Review ${review.title}`, meta: 'Agent thinks you should revisit this', onclick: `pickMission('concept', ${review.id});rlUpdateReward('review',8)` };
   }
   if (action === 'challenge') {
     const next = CHALLENGES.find(c => !getData().challengesCompleted.includes(c.id));
     if (!next) return null;
-    return { title: `Challenge: ${next.title}`, meta: 'RL suggests practice', onclick: `pickMission('play');rlUpdateReward('challenge',10)` };
+    return { title: `Challenge: ${next.title}`, meta: 'Agent thinks practice pays off now', onclick: `pickMission('play');rlUpdateReward('challenge',10)` };
   }
   return null;
 }
@@ -1659,7 +1660,7 @@ function checkAnswer(btn, isCorrect, conceptId) {
     feedback.textContent = '✓ That is correct.';
     quizAnsweredCorrectly = true;
     triggerCelebration();
-    addXP(25);
+    addXP(30);
     hapticSuccess();
     rlUpdateReward('learn', 10);
     const data = getData();
@@ -1669,6 +1670,7 @@ function checkAnswer(btn, isCorrect, conceptId) {
       renderSkillPath();
       renderProfile();
       renderHome();
+      checkPhaseCompletion();
     }
     const nextConcept = CONCEPTS.find(c => c.id > conceptId);
     const nextBtn = nextConcept ? `<button class="btn btn-primary" onclick="closeModal();setTimeout(()=>openConcept(${nextConcept.id}),180)">Next Concept →</button>` : '';
@@ -1808,7 +1810,7 @@ function checkChallenge(btn, isCorrect, challengeId) {
     feedback.style.color = 'var(--success)';
     feedback.textContent = '✓ ' + ch.feedback.correct;
     triggerCelebration();
-    addXP(50);
+    addXP(60);
     hapticSuccess();
     rlUpdateReward('challenge', 15);
     const data = getData();
@@ -1898,13 +1900,13 @@ function toggleBuildInfo() {
    ============================================ */
 function renderProfile() {
   const data = getData();
-  const needed = data.level * 500;
+  const needed = 300;
   const pct = Math.min((data.xp / needed) * 100, 100);
   document.getElementById('profileLevel').textContent = data.level;
   document.getElementById('profileXpFill').style.width = pct + '%';
   document.getElementById('profileXpText').textContent = `${data.xp} / ${needed} XP`;
 
-  const totalEarnedXP = (data.level - 1) * 500 + data.xp;
+  const totalEarnedXP = (data.level - 1) * 300 + data.xp;
   const earned = [];
   if (totalEarnedXP > 0 || data.conceptsCompleted.length > 0 || data.challengesCompleted.length > 0) earned.push('first');
   if (data.streak >= 3) earned.push('streak3');
@@ -1912,11 +1914,11 @@ function renderProfile() {
   if (data.conceptsCompleted.length >= 3) earned.push('quiz');
   if (data.challengesCompleted.length >= 3) earned.push('bug');
   if (data.level >= 3) earned.push('architect');
-  if (totalEarnedXP >= 1200) earned.push('speed');
+  if (totalEarnedXP >= 900) earned.push('speed');
   if (data.conceptsCompleted.length >= 6) earned.push('scholar');
   if (data.reflections.length >= 3) earned.push('deep');
   if (data.bookmarks.length >= 3) earned.push('collector');
-  if (data.level >= 5) earned.push('master');
+  if (data.level >= 6) earned.push('master');
 
   const grid = document.getElementById('profileBadges');
   grid.innerHTML = '';
@@ -1930,6 +1932,40 @@ function renderProfile() {
     `;
     grid.appendChild(cell);
   });
+
+  // RL Brain heatmap
+  const rlBrainEl = document.getElementById('rlBrain');
+  if (rlBrainEl) {
+    const states = ['early', 'building', 'deep_dive', 'mastery', 'mastered'];
+    const actions = ['learn', 'review', 'challenge'];
+    const q = getQTable();
+    let maxVal = 1;
+    states.forEach(s => {
+      actions.forEach(a => {
+        const v = (q[s] && q[s][a]) || 0;
+        if (Math.abs(v) > maxVal) maxVal = Math.abs(v);
+      });
+    });
+    let html = '<div class="rl-grid">';
+    html += '<div class="rl-cell rl-header"></div>';
+    actions.forEach(a => {
+      html += `<div class="rl-cell rl-header">${a}</div>`;
+    });
+    states.forEach(s => {
+      const isCurrent = getRLState() === s;
+      html += `<div class="rl-cell rl-header ${isCurrent ? 'rl-current' : ''}">${s}</div>`;
+      actions.forEach(a => {
+        const v = (q[s] && q[s][a]) || 0;
+        const intensity = Math.min(Math.abs(v) / maxVal, 1);
+        const color = v >= 0
+          ? `rgba(107,142,90,${0.08 + intensity * 0.85})`
+          : `rgba(194,112,106,${0.08 + intensity * 0.85})`;
+        html += `<div class="rl-cell" style="background:${color};color:${intensity > 0.4 ? '#fff' : 'inherit'};">${Math.round(v * 10) / 10}</div>`;
+      });
+    });
+    html += '</div>';
+    rlBrainEl.innerHTML = html;
+  }
 
   const labels = { auto: 'Auto', light: 'Light', dark: 'Dark' };
   document.getElementById('themeLabel').textContent = labels[data.theme] || 'Auto';
@@ -2055,9 +2091,9 @@ function saveReflection() {
   });
   data.draftReflection = null;
   saveData(data);
-  addXP(25, true);
+  addXP(30, true);
   rlUpdateReward('review', 8);
-  showToast('Reflection saved. +25 XP', 'success');
+  showToast('Reflection saved. +30 XP', 'success');
   closeModal();
 }
 
@@ -2067,7 +2103,7 @@ function saveReflection() {
 function addXP(amount, silent) {
   const data = getData();
   data.xp += amount;
-  const needed = data.level * 500;
+  const needed = 300;
   if (data.xp >= needed) {
     data.level++;
     data.xp -= needed;
@@ -2096,6 +2132,57 @@ function checkStreak() {
     saveData(data);
     if (data.streak >= 3) renderProfile();
   }
+}
+
+/* ============================================
+   PHASE COMPLETION
+   ============================================ */
+function checkPhaseCompletion() {
+  const data = getData();
+  for (const phase of PHASES) {
+    if (data.phasesCelebrated.includes(phase.key)) continue;
+    const conceptsInPhase = CONCEPTS.filter(c => c.phase === phase.key);
+    const allDone = conceptsInPhase.length > 0 && conceptsInPhase.every(c => data.conceptsCompleted.includes(c.id));
+    if (allDone) {
+      data.phasesCelebrated.push(phase.key);
+      saveData(data);
+      showPhaseCompleteModal(phase);
+      break;
+    }
+  }
+}
+
+function showPhaseCompleteModal(phase) {
+  const overlay = document.getElementById('modalOverlay');
+  if (overlay) overlay.classList.add('open');
+  const modal = document.createElement('div');
+  modal.className = 'modal phase-modal open';
+  modal.id = 'phaseCompleteModal';
+  modal.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-body" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:3rem;margin-bottom:0.75rem;">${phase.icon}</div>
+      <h3 class="modal-title" style="font-size:1.25rem;margin-bottom:0.5rem;">${phase.label} Complete</h3>
+      <p class="cozy-text" style="margin-bottom:1.25rem;">You finished all concepts in this phase. The next one awaits.</p>
+      <div style="padding:0.75rem 1rem;background:var(--accent-glow);border:1px solid var(--accent);border-radius:var(--radius-lg);color:var(--accent);font-weight:700;font-size:0.9375rem;">+100 XP Bonus</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="dismissPhaseModal()">Continue</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  triggerCelebration();
+  addXP(100);
+}
+
+function dismissPhaseModal() {
+  const modal = document.getElementById('phaseCompleteModal');
+  const overlay = document.getElementById('modalOverlay');
+  if (modal) {
+    modal.classList.remove('open');
+    setTimeout(() => modal.remove(), 300);
+  }
+  if (overlay) overlay.classList.remove('open');
 }
 
 /* ============================================
