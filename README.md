@@ -20,21 +20,24 @@ A Progressive Web App (PWA) for learning microservices architecture using Reinfo
 
 This PWA gamifies your microservices learning journey using RL concepts:
 
-- **Episodes** = Training steps (20 structured learning episodes)
+- **Episodes** = Training steps (20 structured learning episodes across 4 phases)
 - **Rewards** = Points for good patterns, penalties for anti-patterns
+- **RL Agent** = Epsilon-greedy Q-table suggests your next mission
 - **Reflections** = Experience Replay — revisit and reinforce learning
 - **Progress Tracking** = Visual dashboard showing your journey
 
 ## 🗂️ Structure
 
 - **Phase 1:** Foundations (Episodes 1-3)
-- **Phase 2:** Core Patterns (Episodes 4-8)
-- **Phase 3:** Orchestration (Episodes 9-15)
+- **Phase 2:** Core Patterns (Episodes 4-9)
+- **Phase 3:** Orchestration (Episodes 10-15)
 - **Phase 4:** Meta-Learning (Episodes 16-20)
 
 ## 📊 Features
 
 - ✅ Offline-first PWA with Service Worker
+- ✅ 20 episodes across 4 phases (Foundations → Core → Orchestration → Meta)
+- ✅ RL Agent with Q-table and epsilon-greedy mission suggestions
 - ✅ Episode tracking with automatic reward calculation
 - ✅ Reflection journal with mood tracking
 - ✅ Progress dashboard with stats

@@ -10,6 +10,7 @@ const CONCEPTS = [
     id: 1,
     title: 'What Are Microservices?',
     body: 'Microservices architecture structures an application as a collection of loosely coupled, independently deployable services. Each service is responsible for a specific business capability.',
+    phase: 'foundations',
     principle: 'A microservice should be small enough that a single team can fully understand and own it.',
     diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:0.5rem;">
       <div style="padding:0.75rem 2rem;background:var(--accent);color:#fff;border-radius:10px;font-weight:700;font-size:0.9375rem;">Monolith</div>
@@ -39,6 +40,7 @@ const CONCEPTS = [
     id: 2,
     title: 'Database Per Service',
     body: 'Each microservice should have its own database. This ensures loose coupling — you can change one service\'s data model without affecting others.',
+    phase: 'foundations',
     principle: 'Sharing a database between services creates hidden coupling. If Service A changes a table, Service B might break.',
     diagram: `<div style="display:flex;justify-content:center;gap:1.5rem;padding:0.5rem;">
       <div style="text-align:center;">
@@ -68,6 +70,7 @@ const CONCEPTS = [
     id: 3,
     title: 'API Gateway',
     body: 'An API Gateway is a single entry point for all clients. It handles routing, authentication, rate limiting, and response aggregation.',
+    phase: 'foundations',
     principle: 'Clients should not talk directly to individual services. The gateway shields complexity.',
     diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:0.5rem;">
       <div style="padding:0.5rem 2rem;background:var(--accent);color:#fff;border-radius:10px;font-weight:700;font-size:0.9375rem;">API Gateway</div>
@@ -96,6 +99,7 @@ const CONCEPTS = [
     id: 4,
     title: 'Circuit Breaker',
     body: 'When a service calls another that is failing, repeated calls can overwhelm the failing service and cascade to the whole system. A Circuit Breaker stops calls after a threshold of failures, giving the downstream service time to recover.',
+    phase: 'core',
     principle: 'Fail fast and protect the system. A circuit breaker has three states: closed (normal), open (blocking calls), and half-open (testing recovery).',
     diagram: `<div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:0.5rem;">
       <div style="padding:0.5rem 1rem;background:var(--accent);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Service A</div>
@@ -122,6 +126,7 @@ const CONCEPTS = [
     id: 5,
     title: 'Service Discovery',
     body: 'In dynamic environments, service instances come and go. Service Discovery allows services to find each other without hard-coding addresses. A registry keeps track of healthy instances.',
+    phase: 'core',
     principle: 'Services should not know where other services live. They ask the registry, and the registry tells them.',
     diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:0.5rem;">
       <div style="padding:0.5rem 1.5rem;background:var(--accent);color:#fff;border-radius:8px;font-weight:700;font-size:0.875rem;">Service Registry</div>
@@ -149,6 +154,7 @@ const CONCEPTS = [
     id: 6,
     title: 'Observability',
     body: 'You cannot fix what you cannot see. Observability means logs, metrics, and traces that let you understand the internal state of distributed systems from their external outputs.',
+    phase: 'core',
     principle: 'The three pillars: logs (what happened), metrics (how much), traces (where it went).',
     diagram: `<div style="display:flex;justify-content:center;gap:0.5rem;padding:0.5rem;">
       <div style="text-align:center;padding:0.75rem;background:var(--bg-deep);border:2px solid var(--border-glass);border-radius:10px;min-width:70px;">
@@ -182,6 +188,7 @@ const CONCEPTS = [
     id: 7,
     title: 'Containers',
     body: 'Containers package an application with everything it needs to run — code, runtime, libraries, and settings. This makes deployments consistent across environments.',
+    phase: 'core',
     principle: 'It works on my machine is not acceptable. Containers ensure it works everywhere.',
     diagram: `<div style="display:flex;justify-content:center;gap:0.5rem;padding:0.5rem;">
       <div style="padding:0.5rem 1rem;background:var(--info);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">App</div>
@@ -206,6 +213,7 @@ const CONCEPTS = [
     id: 8,
     title: 'Kubernetes',
     body: 'Kubernetes automates the deployment, scaling, and management of containerized applications. It handles scheduling, self-healing, and rolling updates.',
+    phase: 'core',
     principle: 'Let the platform handle the infrastructure. You focus on the application.',
     diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:0.5rem;">
       <div style="padding:0.5rem 1.5rem;background:var(--accent);color:#fff;border-radius:8px;font-weight:700;font-size:0.875rem;">Kubernetes</div>
@@ -234,6 +242,7 @@ const CONCEPTS = [
     title: 'CI/CD',
     body: 'Continuous Integration and Continuous Delivery automate building, testing, and deploying code. Every change is automatically validated and can be released with confidence.',
     principle: 'Manual deployments are risky. Automate everything that can be automated.',
+    phase: 'core',
     diagram: `<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.5rem;">
       <div style="padding:0.5rem 0.75rem;background:var(--info);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Code</div>
       <div style="font-size:1rem;">→</div>
@@ -255,6 +264,308 @@ const CONCEPTS = [
       { title: 'GitHub Actions', url: 'https://docs.github.com/en/actions', type: 'docs' },
       { title: 'Continuous Delivery Book', url: 'https://martinfowler.com/books/continuousDelivery.html', type: 'book' },
       { title: 'Argo CD', url: 'https://argo-cd.readthedocs.io/', type: 'tool' }
+    ]
+  },
+  {
+    id: 10,
+    title: 'Event Sourcing',
+    body: 'Instead of storing only the current state, Event Sourcing stores every change as an event. The current state is derived by replaying events. This gives you a complete audit trail and temporal queries.',
+    principle: 'State is a projection of events. The truth is the log, not the table.',
+    phase: 'orchestration',
+    diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:0.5rem;">
+      <div style="display:flex;flex-direction:column;gap:0.25rem;">
+        <div style="padding:0.375rem 1rem;background:var(--info);color:#fff;border-radius:6px;font-size:0.75rem;font-weight:700;">OrderCreated</div>
+        <div style="padding:0.375rem 1rem;background:var(--info);color:#fff;border-radius:6px;font-size:0.75rem;font-weight:700;">PaymentReceived</div>
+        <div style="padding:0.375rem 1rem;background:var(--info);color:#fff;border-radius:6px;font-size:0.75rem;font-weight:700;">OrderShipped</div>
+      </div>
+      <div style="font-size:1rem;">↓ replay</div>
+      <div style="padding:0.5rem 1.5rem;background:var(--accent);color:#fff;border-radius:8px;font-weight:700;font-size:0.875rem;">Current State</div>
+    </div>`,
+    quiz: {
+      question: 'What is the main advantage of Event Sourcing?',
+      options: [
+        { text: 'Faster read queries', correct: false },
+        { text: 'Complete audit trail and ability to rebuild state from history', correct: true },
+        { text: 'Simpler code than CRUD', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Event Sourcing Pattern', url: 'https://microservices.io/patterns/data/event-sourcing.html', type: 'article' },
+      { title: 'Martin Fowler on Event Sourcing', url: 'https://martinfowler.com/eaaDev/EventSourcing.html', type: 'article' },
+      { title: 'EventStoreDB', url: 'https://www.eventstore.com/', type: 'tool' }
+    ]
+  },
+  {
+    id: 11,
+    title: 'Saga Pattern',
+    body: 'A Saga manages long-running transactions across multiple services by breaking them into a sequence of local transactions. If one step fails, compensating transactions undo previous steps.',
+    principle: 'Distributed transactions are evil. Use sagas: do work, then compensate if needed.',
+    phase: 'orchestration',
+    diagram: `<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.5rem;">
+      <div style="padding:0.5rem 0.75rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Reserve</div>
+      <div style="font-size:1rem;">→</div>
+      <div style="padding:0.5rem 0.75rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Pay</div>
+      <div style="font-size:1rem;">→</div>
+      <div style="padding:0.5rem 0.75rem;background:var(--error);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Fail</div>
+      <div style="font-size:1rem;">←</div>
+      <div style="padding:0.5rem 0.75rem;background:var(--warning);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Refund</div>
+    </div>`,
+    quiz: {
+      question: 'How does a Saga handle failure?',
+      options: [
+        { text: 'Locks all resources until completion', correct: false },
+        { text: 'Runs compensating transactions to undo previous steps', correct: true },
+        { text: 'Retries the failed step indefinitely', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Saga Pattern', url: 'https://microservices.io/patterns/data/saga.html', type: 'article' },
+      { title: 'Orchestration vs Choreography', url: 'https://camunda.com/blog/2023/02/orchestration-vs-choreography/', type: 'article' },
+      { title: 'Temporal.io', url: 'https://temporal.io/', type: 'tool' }
+    ]
+  },
+  {
+    id: 12,
+    title: 'CQRS',
+    body: 'Command Query Responsibility Segregation separates read and write operations into different models. Commands update state; queries read optimized views. This lets you scale reads and writes independently.',
+    principle: 'Reads and writes have different needs. Do not force one model to do both.',
+    phase: 'orchestration',
+    diagram: `<div style="display:flex;justify-content:center;gap:1rem;padding:0.5rem;">
+      <div style="text-align:center;">
+        <div style="padding:0.5rem 1rem;background:var(--error);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;margin-bottom:0.5rem;">Commands</div>
+        <div style="padding:0.75rem;background:var(--bg-deep);border:2px solid var(--border-glass);border-radius:8px;font-size:0.8125rem;color:var(--text-dim);">Write Model</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="padding:0.5rem 1rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;margin-bottom:0.5rem;">Queries</div>
+        <div style="padding:0.75rem;background:var(--bg-deep);border:2px solid var(--border-glass);border-radius:8px;font-size:0.8125rem;color:var(--text-dim);">Read Model</div>
+      </div>
+    </div>`,
+    quiz: {
+      question: 'What problem does CQRS solve?',
+      options: [
+        { text: 'Security vulnerabilities', correct: false },
+        { text: 'Different optimization needs for reads vs writes', correct: true },
+        { text: 'Database connection pooling', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'CQRS Pattern', url: 'https://microservices.io/patterns/data/cqrs.html', type: 'article' },
+      { title: 'Martin Fowler on CQRS', url: 'https://martinfowler.com/bliki/CQRS.html', type: 'article' },
+      { title: 'Axon Framework', url: 'https://axoniq.io/', type: 'tool' }
+    ]
+  },
+  {
+    id: 13,
+    title: 'BFF Pattern',
+    body: 'Backend for Frontend creates a dedicated backend for each client type (mobile, web, IoT). It aggregates and optimizes APIs for that specific client instead of forcing one generic API to serve all.',
+    principle: 'Different clients have different needs. One size fits none.',
+    phase: 'orchestration',
+    diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:0.5rem;">
+      <div style="display:flex;gap:0.5rem;">
+        <div style="padding:0.5rem 1rem;background:var(--info);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Mobile BFF</div>
+        <div style="padding:0.5rem 1rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Web BFF</div>
+      </div>
+      <div style="font-size:1.5rem;color:var(--text-dim);">↓</div>
+      <div style="padding:0.5rem 2rem;background:var(--accent);color:#fff;border-radius:10px;font-weight:700;font-size:0.9375rem;">API Gateway</div>
+    </div>`,
+    quiz: {
+      question: 'Why use BFF instead of a single API Gateway?',
+      options: [
+        { text: 'To reduce infrastructure cost', correct: false },
+        { text: 'To optimize data payloads and aggregation per client type', correct: true },
+        { text: 'To replace the need for authentication', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'BFF Pattern', url: 'https://samnewman.io/patterns/architectural/bff/', type: 'article' },
+      { title: 'Netflix BFF Talk', url: 'https://www.youtube.com/watch?v=m32EdvitXy4', type: 'video' }
+    ]
+  },
+  {
+    id: 14,
+    title: 'Sidecar Pattern',
+    body: 'A Sidecar deploys helper components alongside your main application container in the same Pod. It handles cross-cutting concerns like logging, monitoring, configuration, or proxying without polluting the main app code.',
+    principle: 'Keep the app pure. Offload infrastructure concerns to a companion container.',
+    phase: 'orchestration',
+    diagram: `<div style="display:flex;justify-content:center;gap:1rem;padding:0.5rem;">
+      <div style="text-align:center;">
+        <div style="padding:0.75rem 1rem;background:var(--accent);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;margin-bottom:0.5rem;">App Container</div>
+        <div style="padding:0.75rem 1rem;background:var(--info);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Sidecar</div>
+      </div>
+    </div>`,
+    quiz: {
+      question: 'What is a typical use case for a Sidecar?',
+      options: [
+        { text: 'Running the main business logic', correct: false },
+        { text: 'Handling cross-cutting concerns like logging and proxying', correct: true },
+        { text: 'Storing application state', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Sidecar Pattern', url: 'https://microservices.io/patterns/deployment/sidecar.html', type: 'article' },
+      { title: 'Istio Service Mesh', url: 'https://istio.io/', type: 'tool' },
+      { title: 'Envoy Proxy', url: 'https://www.envoyproxy.io/', type: 'tool' }
+    ]
+  },
+  {
+    id: 15,
+    title: 'Strangler Fig Pattern',
+    body: 'Instead of rewriting a monolith in one big bang, the Strangler Fig pattern gradually replaces monolith functionality by routing traffic to new microservices over time. The old system is "strangled" until nothing remains.',
+    principle: 'Big bang rewrites fail. Migrate incrementally and prove value at each step.',
+    phase: 'orchestration',
+    diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:0.5rem;">
+      <div style="padding:0.5rem 2rem;background:var(--warning);color:#fff;border-radius:10px;font-weight:700;font-size:0.9375rem;">Monolith</div>
+      <div style="font-size:1.5rem;color:var(--text-dim);">↓</div>
+      <div style="display:flex;gap:0.5rem;">
+        <div style="padding:0.5rem 0.75rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Auth MS</div>
+        <div style="padding:0.5rem 0.75rem;background:var(--info);color:#fff;border-radius:8px;font-size:0.75rem;font-weight:700;">Orders MS</div>
+      </div>
+    </div>`,
+    quiz: {
+      question: 'What is the core idea of the Strangler Fig pattern?',
+      options: [
+        { text: 'Rewrite everything at once', correct: false },
+        { text: 'Gradually replace monolith functionality with microservices', correct: true },
+        { text: 'Add a wrapper around the monolith forever', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Strangler Fig Pattern', url: 'https://martinfowler.com/bliki/StranglerFigApplication.html', type: 'article' },
+      { title: 'AWS Migration Hub', url: 'https://aws.amazon.com/migration-hub/', type: 'tool' }
+    ]
+  },
+  {
+    id: 16,
+    title: 'Bulkhead Pattern',
+    body: 'Bulkhead isolates failures by partitioning resources into pools. If one pool is overwhelmed, others continue operating. Named after ship bulkheads that prevent flooding from spreading.',
+    principle: 'Do not let one bad client or service consume all your resources.',
+    phase: 'meta',
+    diagram: `<div style="display:flex;justify-content:center;gap:0.5rem;padding:0.5rem;">
+      <div style="padding:1rem;background:var(--bg-deep);border:2px solid var(--success);border-radius:8px;font-size:0.75rem;font-weight:700;color:var(--text);">Pool A</div>
+      <div style="padding:1rem;background:var(--bg-deep);border:2px solid var(--error);border-radius:8px;font-size:0.75rem;font-weight:700;color:var(--text);">Pool B</div>
+      <div style="padding:1rem;background:var(--bg-deep);border:2px solid var(--success);border-radius:8px;font-size:0.75rem;font-weight:700;color:var(--text);">Pool C</div>
+    </div>`,
+    quiz: {
+      question: 'What does the Bulkhead pattern prevent?',
+      options: [
+        { text: 'Data inconsistency', correct: false },
+        { text: 'One failing component from consuming all resources', correct: true },
+        { text: 'Network latency', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Bulkhead Pattern', url: 'https://microservices.io/patterns/reliability/bulkhead.html', type: 'article' },
+      { title: 'Release It! Book', url: 'https://pragprog.com/titles/mnee2/release-it-second-edition/', type: 'book' }
+    ]
+  },
+  {
+    id: 17,
+    title: 'Retry Pattern',
+    body: 'Transient failures are common in distributed systems. The Retry pattern reattempts a failed operation with backoff strategies (linear, exponential, jitter) instead of failing immediately.',
+    principle: 'Networks glitch. Retry with backoff, but do not retry forever.',
+    phase: 'meta',
+    diagram: `<div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.5rem;">
+      <div style="padding:0.5rem 1rem;background:var(--error);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Fail</div>
+      <div style="font-size:1rem;">→ wait 1s →</div>
+      <div style="padding:0.5rem 1rem;background:var(--warning);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Fail</div>
+      <div style="font-size:1rem;">→ wait 2s →</div>
+      <div style="padding:0.5rem 1rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">OK</div>
+    </div>`,
+    quiz: {
+      question: 'When should you NOT use retries?',
+      options: [
+        { text: 'On network timeout', correct: false },
+        { text: 'On non-idempotent operations without deduplication', correct: true },
+        { text: 'On database connection errors', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Retry Pattern', url: 'https://microservices.io/patterns/reliability/retry.html', type: 'article' },
+      { title: 'AWS Exponential Backoff', url: 'https://docs.aws.amazon.com/general/latest/gr/api-retries.html', type: 'docs' },
+      { title: 'Polly .NET Library', url: 'https://github.com/App-vNext/Polly', type: 'tool' }
+    ]
+  },
+  {
+    id: 18,
+    title: 'Idempotency',
+    body: 'An operation is idempotent if performing it multiple times has the same effect as performing it once. In distributed systems, retries and duplicates are inevitable. Idempotency keys make operations safe to repeat.',
+    principle: 'Design for duplicates. The network will retry your requests.',
+    phase: 'meta',
+    diagram: `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:0.5rem;">
+      <div style="padding:0.5rem 1.5rem;background:var(--accent);color:#fff;border-radius:8px;font-weight:700;font-size:0.875rem;">POST /pay idempotency-key: abc</div>
+      <div style="font-size:1rem;color:var(--text-dim);">× 3 retries</div>
+      <div style="padding:0.5rem 1.5rem;background:var(--success);color:#fff;border-radius:8px;font-weight:700;font-size:0.875rem;">Charged once</div>
+    </div>`,
+    quiz: {
+      question: 'Why is idempotency important in microservices?',
+      options: [
+        { text: 'It makes APIs faster', correct: false },
+        { text: 'It prevents duplicate side effects when requests are retried', correct: true },
+        { text: 'It reduces code complexity', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Idempotency Keys', url: 'https://stripe.com/blog/idempotency', type: 'article' },
+      { title: 'Designing Data-Intensive Applications', url: 'https://dataintensive.net/', type: 'book' }
+    ]
+  },
+  {
+    id: 19,
+    title: 'Backpressure',
+    body: 'Backpressure is a flow control mechanism where a slow consumer signals a fast producer to slow down. Without it, queues grow unbounded and systems collapse under load.',
+    principle: 'Slow consumers must be able to tell fast producers to wait.',
+    phase: 'meta',
+    diagram: `<div style="display:flex;align-items:center;justify-content:center;gap:0.75rem;padding:0.5rem;">
+      <div style="padding:0.5rem 1rem;background:var(--success);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Producer</div>
+      <div style="font-size:1.25rem;">→</div>
+      <div style="padding:0.5rem 1rem;background:var(--warning);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Queue</div>
+      <div style="font-size:1.25rem;">→</div>
+      <div style="padding:0.5rem 1rem;background:var(--error);color:#fff;border-radius:8px;font-size:0.8125rem;font-weight:700;">Slow</div>
+      <div style="font-size:1.25rem;">←</div>
+      <div style="font-size:0.8125rem;font-weight:700;color:var(--error);">Backpressure</div>
+    </div>`,
+    quiz: {
+      question: 'What problem does backpressure solve?',
+      options: [
+        { text: 'Database schema migration', correct: false },
+        { text: 'Unbounded queue growth when consumers are slower than producers', correct: true },
+        { text: 'Service authentication', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'Reactive Streams', url: 'https://www.reactive-streams.org/', type: 'docs' },
+      { title: 'Backpressure in RxJS', url: 'https://rxjs.dev/guide/backpressure', type: 'docs' },
+      { title: 'Project Reactor', url: 'https://projectreactor.io/', type: 'tool' }
+    ]
+  },
+  {
+    id: 20,
+    title: 'Domain-Driven Design',
+    body: 'DDD aligns software design with business domains. Bounded Contexts define clear boundaries where a domain model is consistent. Ubiquitous Language ensures developers and domain experts speak the same words.',
+    principle: 'Code should reflect the business. Boundaries should reflect the language of the domain.',
+    phase: 'meta',
+    diagram: `<div style="display:flex;justify-content:center;gap:0.5rem;padding:0.5rem;">
+      <div style="text-align:center;padding:0.75rem;background:var(--bg-deep);border:2px solid var(--accent);border-radius:10px;min-width:80px;">
+        <div style="font-size:0.6875rem;font-weight:700;color:var(--accent);margin-bottom:0.25rem;">Orders BC</div>
+        <div style="font-size:0.625rem;color:var(--text-dim);">Order, LineItem</div>
+      </div>
+      <div style="text-align:center;padding:0.75rem;background:var(--bg-deep);border:2px solid var(--info);border-radius:10px;min-width:80px;">
+        <div style="font-size:0.6875rem;font-weight:700;color:var(--info);margin-bottom:0.25rem;">Shipping BC</div>
+        <div style="font-size:0.625rem;color:var(--text-dim);">Shipment, Route</div>
+      </div>
+    </div>`,
+    quiz: {
+      question: 'What is a Bounded Context in DDD?',
+      options: [
+        { text: 'A security perimeter around a database', correct: false },
+        { text: 'A boundary within which a domain model is consistent and unified', correct: true },
+        { text: 'A Kubernetes namespace', correct: false }
+      ]
+    },
+    resources: [
+      { title: 'DDD Reference', url: 'https://www.domainlanguage.com/ddd/reference/', type: 'article' },
+      { title: 'Implementing DDD', url: 'https://www.oreilly.com/library/view/implementing-domain-driven-design/9780133039900/', type: 'book' },
+      { title: 'Bounded Context', url: 'https://martinfowler.com/bliki/BoundedContext.html', type: 'article' }
     ]
   }
 ];
@@ -442,19 +753,223 @@ ssh prod-server "docker pull my-app:latest && docker restart my-app"`,
       correct: 'Exactly. Use CI/CD pipelines for reproducible, audited, automated deployments.',
       wrong: 'SSH overhead is negligible. Think about what happens when that developer is on vacation and something breaks.'
     }
+  },
+  {
+    id: 10,
+    title: 'CRUD Event Storm',
+    difficulty: 'medium',
+    story: 'A team stores only the latest state in a table. They cannot answer "who changed what and when." What is missing?',
+    code: `// Users table
+| id | name  | email         |
+| 1  | Alice | alice@old.com |  // lost history`,
+    options: [
+      { text: 'Event Sourcing — storing every change as an event', correct: true },
+      { text: 'A bigger database server', correct: false },
+      { text: 'More indexes on the table', correct: false }
+    ],
+    feedback: {
+      correct: 'Right. Event Sourcing stores every change, giving you a full audit trail.',
+      wrong: 'Infrastructure size does not solve the missing history problem.'
+    }
+  },
+  {
+    id: 11,
+    title: 'Saga Compensation',
+    difficulty: 'hard',
+    story: 'An order is reserved, payment succeeds, but inventory is out of stock. What must happen?',
+    code: `1. Reserve Order   ✓
+2. Charge Payment  ✓
+3. Check Inventory ✗`,
+    options: [
+      { text: 'Refund the payment and cancel the order', correct: true },
+      { text: 'Retry inventory check forever', correct: false },
+      { text: 'Ship the order anyway', correct: false }
+    ],
+    feedback: {
+      correct: 'Correct. A Saga runs compensating transactions to undo previous steps on failure.',
+      wrong: 'Think about what happens to the customer who paid but gets nothing.'
+    }
+  },
+  {
+    id: 12,
+    title: 'Read Model Lag',
+    difficulty: 'medium',
+    story: 'A user updates their profile but the search page still shows old data for a few seconds. Why?',
+    code: `// Write path: update profile
+// Read path: query search index`,
+    options: [
+      { text: 'The read model is eventually consistent with the write model', correct: true },
+      { text: 'The database is corrupted', correct: false },
+      { text: 'Caching is disabled', correct: false }
+    ],
+    feedback: {
+      correct: 'Right. CQRS separates read/write models; reads can lag slightly behind writes.',
+      wrong: 'This is normal behavior in CQRS, not corruption.'
+    }
+  },
+  {
+    id: 13,
+    title: 'Mobile Payload Bloat',
+    difficulty: 'easy',
+    story: 'A mobile app receives a 500KB JSON with fields it never uses. What pattern fixes this?',
+    code: `// Generic API returns everything
+{ "user": {...}, "orders": [...], "recommendations": [...] }`,
+    options: [
+      { text: 'BFF — a dedicated backend that returns only what mobile needs', correct: true },
+      { text: 'Compress the JSON with gzip', correct: false },
+      { text: 'Use GraphQL on the client', correct: false }
+    ],
+    feedback: {
+      correct: 'Correct. A BFF tailors the API to each client type.',
+      wrong: 'Compression helps but does not remove the root problem: wrong data shape.'
+    }
+  },
+  {
+    id: 14,
+    title: 'Cross-Cutting Mess',
+    difficulty: 'medium',
+    story: 'Every service implements its own logging, TLS, and retry logic differently. What pattern centralizes this?',
+    code: `// Service A: custom logger
+// Service B: different logger
+// Service C: no TLS`,
+    options: [
+      { text: 'Sidecar pattern — deploy proxy/logger alongside each app', correct: true },
+      { text: 'Put all logic in a shared library', correct: false },
+      { text: 'Hire a dedicated DevOps team', correct: false }
+    ],
+    feedback: {
+      correct: 'Right. A Sidecar container handles cross-cutting concerns without changing app code.',
+      wrong: 'Shared libraries create coupling. Sidecars keep apps pure.'
+    }
+  },
+  {
+    id: 15,
+    title: 'Big Bang Rewrite',
+    difficulty: 'hard',
+    story: 'A company plans to shut down their monolith for 6 months to rewrite everything. What pattern prevents this risk?',
+    code: `// Monolith off
+// 6 months later...
+// New system launches with bugs`,
+    options: [
+      { text: 'Strangler Fig — migrate feature by feature', correct: true },
+      { text: 'Hire more developers', correct: false },
+      { text: 'Add microservices around the monolith but keep using both forever', correct: false }
+    ],
+    feedback: {
+      correct: 'Exactly. Incremental migration reduces risk and proves value early.',
+      wrong: 'More developers on a big bang does not reduce risk.'
+    }
+  },
+  {
+    id: 16,
+    title: 'Noisy Neighbor',
+    difficulty: 'medium',
+    story: 'One tenant hogs all database connections, slowing every other tenant. What pattern isolates this?',
+    code: `// Connection pool: 100 max
+// Tenant A uses 95
+// Tenant B times out`,
+    options: [
+      { text: 'Bulkhead — partition resources per tenant', correct: true },
+      { text: 'Increase the pool to 1000', correct: false },
+      { text: 'Rate limit Tenant A at the gateway', correct: false }
+    ],
+    feedback: {
+      correct: 'Right. Bulkheads ensure one tenant cannot consume all shared resources.',
+      wrong: 'A bigger pool just delays the problem.'
+    }
+  },
+  {
+    id: 17,
+    title: 'Retry Storm',
+    difficulty: 'medium',
+    story: 'A downstream service is flaky. Every client retries immediately on failure. The service never recovers. Why?',
+    code: `// All clients retry at the same time
+setTimeout(retry, 1000); // synchronized`,
+    options: [
+      { text: 'Retries need exponential backoff with jitter', correct: true },
+      { text: 'Clients should never retry', correct: false },
+      { text: 'The service needs more CPU', correct: false }
+    ],
+    feedback: {
+      correct: 'Exactly. Exponential backoff with jitter spreads out retries so the service can recover.',
+      wrong: 'Immediate synchronized retries create a thundering herd.'
+    }
+  },
+  {
+    id: 18,
+    title: 'Double Charge',
+    difficulty: 'hard',
+    story: 'A payment API is called twice because the first request timed out. The customer is charged twice. What is missing?',
+    code: `// Client retries POST /charge
+// No unique key sent
+// Two charges created`,
+    options: [
+      { text: 'Idempotency keys to deduplicate retries', correct: true },
+      { text: 'Faster network connection', correct: false },
+      { text: 'Disable retries entirely', correct: false }
+    ],
+    feedback: {
+      correct: 'Correct. Idempotency keys let the server recognize and reject duplicate requests.',
+      wrong: 'Faster networks still glitch. Retries are necessary.'
+    }
+  },
+  {
+    id: 19,
+    title: 'Queue Explosion',
+    difficulty: 'medium',
+    story: 'A producer sends 10K messages/second. The consumer processes 100/second. The queue grows until memory runs out. What pattern helps?',
+    code: `Producer → [Queue] → Slow Consumer`,
+    options: [
+      { text: 'Backpressure — tell the producer to slow down', correct: true },
+      { text: 'Add 100 more consumers', correct: false },
+      { text: 'Use a bigger server for the queue', correct: false }
+    ],
+    feedback: {
+      correct: 'Right. Backpressure flow-control prevents unbounded queue growth.',
+      wrong: 'More consumers help, but the fundamental fix is flow control.'
+    }
+  },
+  {
+    id: 20,
+    title: 'Ubiquitous Confusion',
+    difficulty: 'easy',
+    story: 'Developers call a domain concept "Customer" in one service and "User" in another. Data mapping breaks. What principle prevents this?',
+    code: `// Service A: Customer
+// Service B: User
+// They mean the same thing, but code diverges`,
+    options: [
+      { text: 'DDD Ubiquitous Language — agree on terms within a Bounded Context', correct: true },
+      { text: 'Use a shared library with one name', correct: false },
+      { text: 'Add a translation layer between services', correct: false }
+    ],
+    feedback: {
+      correct: 'Correct. Ubiquitous Language aligns code with the domain within each Bounded Context.',
+      wrong: 'Shared libraries couple services. Alignment of language is the real fix.'
+    }
   }
 ];
 
 const SKILL_NODES = [
-  { id: 1, name: 'Containers', icon: '📦' },
-  { id: 2, name: 'REST APIs', icon: '🔗' },
-  { id: 3, name: 'Data', icon: '🗄️' },
-  { id: 4, name: 'Resilience', icon: '🛡️' },
-  { id: 5, name: 'Gateway', icon: '🚪' },
-  { id: 6, name: 'Discovery', icon: '🔍' },
-  { id: 7, name: 'Observability', icon: '📊' },
+  { id: 1, name: 'Microservices', icon: '🧩' },
+  { id: 2, name: 'DB Per Service', icon: '🗄️' },
+  { id: 3, name: 'API Gateway', icon: '🚪' },
+  { id: 4, name: 'Circuit Breaker', icon: '🛡️' },
+  { id: 5, name: 'Discovery', icon: '🔍' },
+  { id: 6, name: 'Observability', icon: '📊' },
+  { id: 7, name: 'Containers', icon: '📦' },
   { id: 8, name: 'K8s', icon: '☸️' },
-  { id: 9, name: 'CI/CD', icon: '🚀' }
+  { id: 9, name: 'CI/CD', icon: '🚀' },
+  { id: 10, name: 'Event Sourcing', icon: '📜' },
+  { id: 11, name: 'Saga', icon: '🎭' },
+  { id: 12, name: 'CQRS', icon: '⚡' },
+  { id: 13, name: 'BFF', icon: '📱' },
+  { id: 14, name: 'Sidecar', icon: '🛵' },
+  { id: 15, name: 'Strangler', icon: '🌿' },
+  { id: 16, name: 'Bulkhead', icon: '⛵' },
+  { id: 17, name: 'Retry', icon: '🔁' },
+  { id: 18, name: 'Idempotency', icon: '🔑' },
+  { id: 19, name: 'Backpressure', icon: '🌊' },
+  { id: 20, name: 'DDD', icon: '🏛️' }
 ];
 
 const BADGES = [
@@ -476,6 +991,84 @@ const REFLECTION_PROMPTS = [
   "I'm stuck on...",
   'I want to try...'
 ];
+
+/* ============================================
+   RL AGENT (Q-Table)
+   ============================================ */
+const RL_KEY = 'dojo_rl_v1';
+const ACTIONS = ['learn', 'review', 'challenge'];
+const EPSILON = 0.25;
+const ALPHA = 0.15;
+const GAMMA = 0.9;
+
+function getRLState() {
+  const data = getData();
+  // State = which concept needs attention
+  const total = CONCEPTS.length;
+  const completed = data.conceptsCompleted.length;
+  const challengesDone = data.challengesCompleted.length;
+  if (completed === 0) return 'concept_1';
+  if (completed < 3) return 'early';
+  if (completed < total && challengesDone < 5) return 'building';
+  if (completed < total) return 'deep_dive';
+  if (challengesDone < CHALLENGES.length) return 'mastery';
+  return 'mastered';
+}
+
+function getQTable() {
+  const raw = localStorage.getItem(RL_KEY);
+  if (!raw) return {};
+  try { return JSON.parse(raw); } catch (e) { return {}; }
+}
+
+function saveQTable(q) {
+  localStorage.setItem(RL_KEY, JSON.stringify(q));
+}
+
+function getQ(state, action) {
+  const q = getQTable();
+  return (q[state] && q[state][action]) || 0;
+}
+
+function setQ(state, action, value) {
+  const q = getQTable();
+  if (!q[state]) q[state] = {};
+  q[state][action] = value;
+  saveQTable(q);
+}
+
+function rlPickAction() {
+  const state = getRLState();
+  const rand = Math.random();
+  if (rand < EPSILON) {
+    // Explore
+    return ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+  }
+  // Exploit
+  let bestAction = ACTIONS[0];
+  let bestValue = getQ(state, bestAction);
+  for (let i = 1; i < ACTIONS.length; i++) {
+    const v = getQ(state, ACTIONS[i]);
+    if (v > bestValue) {
+      bestValue = v;
+      bestAction = ACTIONS[i];
+    }
+  }
+  return bestAction;
+}
+
+function rlUpdateReward(action, reward) {
+  const state = getRLState();
+  const oldQ = getQ(state, action);
+  const nextState = getRLState();
+  let maxNext = getQ(nextState, ACTIONS[0]);
+  for (let i = 1; i < ACTIONS.length; i++) {
+    const v = getQ(nextState, ACTIONS[i]);
+    if (v > maxNext) maxNext = v;
+  }
+  const newQ = oldQ + ALPHA * (reward + GAMMA * maxNext - oldQ);
+  setQ(state, action, newQ);
+}
 
 /* ============================================
    STATE
@@ -749,7 +1342,7 @@ function pickMission(type, id) {
     showSection('play');
     const firstIncomplete = CHALLENGES.find(c => !getData().challengesCompleted.includes(c.id));
     if (firstIncomplete) setTimeout(() => openChallenge(firstIncomplete.id), 220);
-  } else if (type === 'review') {
+  } else if (type === 'reflect') {
     renderProfile();
     openModal('profileModal');
     setTimeout(() => openReflection(), 280);
@@ -816,6 +1409,21 @@ function renderHome() {
   const missionsEl = document.getElementById('homeMissions');
   if (missionsEl) {
     missionsEl.innerHTML = '';
+
+    // RL Agent suggestion
+    const rlAction = rlPickAction();
+    const rlMission = buildRLMission(rlAction);
+    if (rlMission) {
+      missionsEl.innerHTML += `
+        <button class="mission-card" style="border-color:var(--accent);background:var(--accent-glow);" onclick="${rlMission.onclick}">
+          <div class="mission-icon">🧠</div>
+          <div class="mission-info">
+            <div class="mission-title">Agent Says: ${rlMission.title}</div>
+            <div class="mission-meta">${rlMission.meta}</div>
+          </div>
+        </button>`;
+    }
+
     if (data.lastConceptOpened) {
       const lastConcept = CONCEPTS.find(c => c.id === data.lastConceptOpened);
       if (lastConcept) {
@@ -854,7 +1462,7 @@ function renderHome() {
           <div class="mission-meta">10 min · Challenge</div>
         </div>
       </button>
-      <button class="mission-card" onclick="pickMission('review')">
+      <button class="mission-card" onclick="pickMission('reflect')">
         <div class="mission-icon">🌿</div>
         <div class="mission-info">
           <div class="mission-title">Reflect: Journal Entry</div>
@@ -864,6 +1472,25 @@ function renderHome() {
   }
 }
 
+function buildRLMission(action) {
+  if (action === 'learn') {
+    const next = CONCEPTS.find(c => !getData().conceptsCompleted.includes(c.id));
+    if (!next) return null;
+    return { title: `Learn ${next.title}`, meta: 'RL suggests new concepts', onclick: `pickMission('learn');rlUpdateReward('learn',5)` };
+  }
+  if (action === 'review') {
+    const review = getReviewConcept();
+    if (!review) return null;
+    return { title: `Review ${review.title}`, meta: 'RL suggests spaced repetition', onclick: `pickMission('concept', ${review.id});rlUpdateReward('review',8)` };
+  }
+  if (action === 'challenge') {
+    const next = CHALLENGES.find(c => !getData().challengesCompleted.includes(c.id));
+    if (!next) return null;
+    return { title: `Challenge: ${next.title}`, meta: 'RL suggests practice', onclick: `pickMission('play');rlUpdateReward('challenge',10)` };
+  }
+  return null;
+}
+
 function getNextConceptName() {
   const data = getData();
   const next = CONCEPTS.find(c => !data.conceptsCompleted.includes(c.id));
@@ -871,9 +1498,16 @@ function getNextConceptName() {
 }
 
 /* ============================================
-   LEARN — SKILL PATH (ALL UNLOCKED)
+   LEARN — SKILL PATH (PHASED)
    ============================================ */
 let currentFilter = '';
+
+const PHASES = [
+  { key: 'foundations', label: 'Foundations', icon: '🌱', range: [1, 3] },
+  { key: 'core', label: 'Core Patterns', icon: '🌿', range: [4, 9] },
+  { key: 'orchestration', label: 'Orchestration', icon: '🔥', range: [10, 15] },
+  { key: 'meta', label: 'Meta-Learning', icon: '🏆', range: [16, 20] }
+];
 
 function filterSkillPath(query) {
   currentFilter = query.toLowerCase().trim();
@@ -882,51 +1516,68 @@ function filterSkillPath(query) {
 
 function renderSkillPath() {
   const data = getData();
-  const container = document.getElementById('skillPath');
-  const svgEl = document.getElementById('skillSvg');
-  container.innerHTML = '';
-  if (svgEl) svgEl.innerHTML = '';
+  const phasesContainer = document.getElementById('skillPathPhases');
+  phasesContainer.innerHTML = '';
 
-  const total = SKILL_NODES.length;
-  const paths = [];
+  PHASES.forEach(phase => {
+    const phaseEl = document.createElement('div');
+    phaseEl.className = 'phase-block';
 
-  SKILL_NODES.forEach((node, index) => {
-    const conceptId = index + 1;
-    const hasConcept = conceptId <= CONCEPTS.length;
-    const isDone = hasConcept && data.conceptsCompleted.includes(conceptId);
-    const matches = !currentFilter || node.name.toLowerCase().includes(currentFilter) || (hasConcept && CONCEPTS[index].title.toLowerCase().includes(currentFilter));
+    const nodesInPhase = SKILL_NODES.filter(n => n.id >= phase.range[0] && n.id <= phase.range[1]);
+    const doneInPhase = nodesInPhase.filter(n => data.conceptsCompleted.includes(n.id)).length;
+    const phasePct = Math.round((doneInPhase / nodesInPhase.length) * 100);
 
-    const btn = document.createElement('button');
-    btn.className = `skill-node ${isDone ? 'node-done' : ''} ${!isDone && hasConcept ? 'node-current' : ''}`;
-    btn.style.opacity = matches ? '1' : '0.2';
-    btn.style.pointerEvents = matches ? 'auto' : 'none';
-    btn.innerHTML = `
-      <div class="node-circle">${isDone ? '✓' : node.icon}</div>
-      <div class="node-name">${node.name}</div>
+    // Phase header
+    const header = document.createElement('div');
+    header.className = 'phase-header';
+    header.innerHTML = `
+      <div class="phase-title">
+        <span class="phase-icon">${phase.icon}</span>
+        <span>${phase.label}</span>
+      </div>
+      <div class="phase-progress">${doneInPhase}/${nodesInPhase.length}</div>
     `;
-    if (hasConcept) {
-      btn.addEventListener('click', () => openConcept(conceptId));
-    } else {
-      btn.disabled = true;
-    }
-    container.appendChild(btn);
+    phaseEl.appendChild(header);
 
-    if (index < total - 1 && svgEl) {
-      const nextDone = (index + 2) <= CONCEPTS.length && data.conceptsCompleted.includes(index + 2);
-      const x1 = ((index + 0.5) / total) * 100;
-      const x2 = ((index + 1.5) / total) * 100;
-      const y = 50;
-      const cp1x = x1 + (x2 - x1) * 0.5;
-      const cp1y = y - 15;
-      const cp2x = x1 + (x2 - x1) * 0.5;
-      const cp2y = y + 15;
-      const d = `M ${x1} ${y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y}`;
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', d);
-      path.setAttribute('class', `skill-path-line ${isDone && nextDone ? 'done' : ''}`);
-      path.setAttribute('stroke-opacity', matches ? '1' : '0.2');
-      svgEl.appendChild(path);
-    }
+    // Progress bar for phase
+    const barWrap = document.createElement('div');
+    barWrap.className = 'phase-bar-wrap';
+    barWrap.innerHTML = `<div class="phase-bar-fill" style="width:${phasePct}%"></div>`;
+    phaseEl.appendChild(barWrap);
+
+    // Nodes row
+    const row = document.createElement('div');
+    row.className = 'phase-nodes';
+
+    nodesInPhase.forEach((node, idx) => {
+      const conceptId = node.id;
+      const isDone = data.conceptsCompleted.includes(conceptId);
+      const matches = !currentFilter || node.name.toLowerCase().includes(currentFilter) || (CONCEPTS[conceptId - 1] && CONCEPTS[conceptId - 1].title.toLowerCase().includes(currentFilter));
+
+      const btn = document.createElement('button');
+      btn.className = `skill-node ${isDone ? 'node-done' : ''} ${!isDone ? 'node-current' : ''}`;
+      if (!matches) {
+        btn.style.opacity = '0.2';
+        btn.style.pointerEvents = 'none';
+      }
+      btn.innerHTML = `
+        <div class="node-circle">${isDone ? '✓' : node.icon}</div>
+        <div class="node-name">${node.name}</div>
+      `;
+      btn.addEventListener('click', () => openConcept(conceptId));
+      row.appendChild(btn);
+
+      // Connector
+      if (idx < nodesInPhase.length - 1) {
+        const nextDone = data.conceptsCompleted.includes(nodesInPhase[idx + 1].id);
+        const connector = document.createElement('div');
+        connector.className = `phase-connector ${isDone && nextDone ? 'done' : ''}`;
+        row.appendChild(connector);
+      }
+    });
+
+    phaseEl.appendChild(row);
+    phasesContainer.appendChild(phaseEl);
   });
 }
 
@@ -1010,6 +1661,7 @@ function checkAnswer(btn, isCorrect, conceptId) {
     triggerCelebration();
     addXP(25);
     hapticSuccess();
+    rlUpdateReward('learn', 10);
     const data = getData();
     if (!data.conceptsCompleted.includes(conceptId)) {
       data.conceptsCompleted.push(conceptId);
@@ -1158,6 +1810,7 @@ function checkChallenge(btn, isCorrect, challengeId) {
     triggerCelebration();
     addXP(50);
     hapticSuccess();
+    rlUpdateReward('challenge', 15);
     const data = getData();
     if (!data.challengesCompleted.includes(challengeId)) {
       data.challengesCompleted.push(challengeId);
@@ -1403,6 +2056,7 @@ function saveReflection() {
   data.draftReflection = null;
   saveData(data);
   addXP(25, true);
+  rlUpdateReward('review', 8);
   showToast('Reflection saved. +25 XP', 'success');
   closeModal();
 }
