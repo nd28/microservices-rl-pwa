@@ -1,7 +1,7 @@
 // Microservices Dojo Service Worker
-// Version: dojo-v4
+// Version: dojo-v5
 
-const CACHE_NAME = 'dojo-v4';
+const CACHE_NAME = 'dojo-v5';
 const urlsToCache = [
   './',
   './index.html',
@@ -26,17 +26,23 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
+// Network-first for same-origin GETs: always serve fresh code when online
+// (prevents stale app.js + new index.html from blanking the page), and fall
+// back to cache when offline.
 self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) return response;
-        return fetch(event.request).catch(() => {
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
+    fetch(event.request)
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        return res;
       })
+      .catch(() => caches.match(event.request)
+        .then(r => r || caches.match('./index.html')))
   );
 });
 
