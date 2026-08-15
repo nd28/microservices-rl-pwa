@@ -520,6 +520,9 @@ html, body {
   margin: 0.625rem auto;
   opacity: 0.45;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .modal-body {
