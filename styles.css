@@ -558,7 +558,7 @@ html, body {
     transform: translateY(100%);
     width: 100%;
     max-width: 100%;
-    max-height: 92vh;
+    max-height: calc(100dvh - 6vh);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     border-bottom: none;
   }
