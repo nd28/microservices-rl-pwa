@@ -1239,7 +1239,8 @@ function updateGreeting() {
   else if (hour >= 12 && hour < 17) text = 'Good afternoon';
   else if (hour >= 17 && hour < 21) text = 'Good evening';
   else text = 'Good night';
-  document.getElementById('greeting').textContent = text;
+  const g = document.getElementById('greeting');
+  if (g) g.textContent = text;
 }
 
 /* ============================================

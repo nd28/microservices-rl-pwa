@@ -127,29 +127,6 @@ html, body {
 }
 
 /* ============================================
-   HEADER
-   ============================================ */
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  padding: 1.25rem;
-  text-align: center;
-  background: var(--glass-tint), var(--glass);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border-bottom: 1px solid var(--border-glass);
-  pointer-events: none;
-}
-
-.app-header h1 {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  color: var(--text-dim);
-  letter-spacing: -0.01em;
-}
-
-/* ============================================
    SECTIONS
    ============================================ */
 .app-main {
