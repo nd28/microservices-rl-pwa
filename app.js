@@ -1307,18 +1307,22 @@ function initModals() {
     if (e.key === 'Escape') closeModal();
   });
 
-  document.querySelectorAll('.modal').forEach(modal => {
+  // Swipe-down-to-close, only via the concept modal's handle
+  const conceptHandle = document.querySelector('#conceptModal .modal-handle');
+  if (conceptHandle) {
+    let swipeActive = false;
     let startY = 0;
-    modal.addEventListener('touchstart', (e) => {
+    conceptHandle.addEventListener('touchstart', (e) => {
+      swipeActive = true;
       startY = e.touches[0].clientY;
     }, { passive: true });
-    modal.addEventListener('touchend', (e) => {
+    document.addEventListener('touchend', (e) => {
+      if (!swipeActive) return;
+      swipeActive = false;
       const endY = e.changedTouches[0].clientY;
-      if (endY - startY > 80 && modal.scrollTop <= 5) {
-        closeModal();
-      }
+      if (endY - startY > 80) closeModal();
     }, { passive: true });
-  });
+  }
 }
 
 /* ============================================
